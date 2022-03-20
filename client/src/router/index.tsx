@@ -1,85 +1,99 @@
-import React, {lazy, ReactNode, Suspense} from "react";
-import {Routes, Route} from "react-router-dom";
-import Home from "@/views/Home";
-import NotFound from "@/component/notFound";
-import ProjectManagement from "@/views/ProjectManagement";
-import ProjectManagementList from "@/views/ProjectManagement/List";
-import ProjectManagementDetail from "@/views/ProjectManagement/Detail";
+import React, { ReactNode } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Home from '@/views/Home/index.tsx';
+import NotFound from '@/component/notFound.tsx';
+import ProjectManagement from '@/views/ProjectManagement/index.tsx';
+import ProjectManagementList from '@/views/ProjectManagement/List/index.tsx';
+import ProjectManagementDetail from '@/views/ProjectManagement/Detail/index.tsx';
 
-export type RouterType = {
-    path: string,
-    index?: boolean
-    meta: {
-        title: string,
-        [key: string]: any
-    },
-    redirect?: string,
-    element?: ReactNode
-    children?: Array<RouterType>
-}
+type RouterType = {
+  path: string;
+  index?: boolean;
+  meta: {
+    title: string;
+    [key: string]: unknown;
+  };
+  redirect?: string;
+  element?: ReactNode;
+  children?: Array<RouterType>;
+};
 
+type RouterViewType = {
+  router: RouterType;
+  path: string | null | undefined;
+};
 
 export const routerList: Array<RouterType> = [
-    {
-        path: '/',
-        meta: {
-            title: '首页',
-        },
-        element: <Home/>,
+  {
+    path: '/',
+    meta: {
+      title: '首页',
     },
-    {
-        path: '/projectManagement',
-        meta: {
-            title: '项目模块管理',
-        },
-        element: <ProjectManagement/>,
-        children: [
-            {
-                path: '',
-                index: true,
-                meta: {
-                    title: '项目模块管理',
-                },
-                element: <ProjectManagementList/>
-            },
-            {
-                path: 'detail',
-                meta: {
-                    title: '模块详情'
-                },
-                element: <ProjectManagementDetail/>
-            }
-        ]
+    element: <Home />,
+  },
+  {
+    path: '/projectManagement',
+    meta: {
+      title: '项目模块管理',
     },
-    {
-        path: '*',
+    element: <ProjectManagement />,
+    children: [
+      {
+        path: '',
+        index: true,
         meta: {
-            title: '404',
+          title: '项目模块管理',
         },
-        element: <NotFound/>,
-    }
-]
+        element: <ProjectManagementList />,
+      },
+      {
+        path: 'detail',
+        meta: {
+          title: '模块详情',
+        },
+        element: <ProjectManagementDetail />,
+      },
+    ],
+  },
+  {
+    path: '*',
+    meta: {
+      title: '404',
+    },
+    element: <NotFound />,
+  },
+];
 
-const RouterView = (router: RouterType, path: string = '') => {
-    const _tempPath = path ? `${path}/${router.path}` : router.path
-    if (!router.index && !router.path) return <Route key={`${path}Not`} path='404' element={<NotFound/>}/>
-    if (!router.children) {
-        return <Route key={_tempPath} path={router.path} element={router.element}/>
-    } else {
-        return <Route key={_tempPath} path={router.path} element={router.element}>
-            {router.children.map((item) => RouterView(item, router.path))}
-        </Route>
-    }
+function RouterView({ router, path }: RouterViewType) {
+  const tempPath = path ? `${path}/${router.path}` : router.path;
+  if (!router.index && !router.path) {
+    return <Route key={`${path}Not`} path='404' element={<NotFound />} />;
+  }
+  if (!router.children) {
+    return <Route key={tempPath} path={router.path} element={router.element} />;
+  }
+  return (
+    <Route key={tempPath} path={router.path} element={router.element}>
+      {router.children.map((item) =>
+        RouterView({
+          router: item,
+          path: router.path,
+        }),
+      )}
+    </Route>
+  );
 }
 
-
-const RouterInit = () => {
-    return <div>
-        <Routes>
-            {routerList.map(item => RouterView(item))}
-        </Routes>
+function RouterInit() {
+  return (
+    <div>
+      <Routes>
+        {routerList.map((item) =>
+          RouterView({ router: item } as RouterViewType),
+        )}
+      </Routes>
     </div>
-
+  );
 }
 
-export default RouterInit
+export default RouterInit;

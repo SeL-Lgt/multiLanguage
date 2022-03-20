@@ -1,8 +1,6 @@
-import React from "react";
+import React from 'react';
 
-const ProjectManagement = (): JSX.Element => {
-    return (
-        <div>ProjectManagement</div>
-    )
+function ProjectManagement(): JSX.Element {
+  return <div>ProjectManagement</div>;
 }
-export default ProjectManagement
+export default ProjectManagement;

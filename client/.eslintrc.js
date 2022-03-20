@@ -20,6 +20,12 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': ['error'],
+    // 以下针对airbnb配置
+    'react/jsx-filename-extension': [
+      'error',
+      { extensions: ['.js', '.jsx', '.tsx', '.ts'] },
+    ],
+    'no-unused-vars': ['warn'],
   },
 };

@@ -1,20 +1,19 @@
-import React, {ReactNode} from "react";
-import RouterInit from "@/router";
-import {Layout} from "antd";
-import {Content, Footer, Header} from "antd/lib/layout/layout";
+import React from 'react';
+import { Layout } from 'antd';
+import { Content, Header } from 'antd/lib/layout/layout';
+import RouterInit from '@/router/index.tsx';
 
 function App() {
-    return (
-        <div className="App">
-            <Layout>
-                <Header>header</Header>
-                <Content>
-                    <RouterInit/>
-                </Content>
-            </Layout>
-
-        </div>
-    )
+  return (
+    <div className='App'>
+      <Layout>
+        <Header>header</Header>
+        <Content>
+          <RouterInit />
+        </Content>
+      </Layout>
+    </div>
+  );
 }
 
-export default App
+export default App;

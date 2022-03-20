@@ -1,10 +1,7 @@
-import React from "react";
-import {Outlet, useOutlet} from "react-router-dom";
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 
-const ProjectManagement = (): JSX.Element => {
-
-    return (
-        <Outlet/>
-    )
+function ProjectManagement() {
+  return <Outlet />;
 }
-export default ProjectManagement
+export default ProjectManagement;
