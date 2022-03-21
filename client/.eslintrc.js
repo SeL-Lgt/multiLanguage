@@ -12,22 +12,37 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: './tsconfig.json', // + 新增 parserOptions 配置
-    tsconfigRootDir: __dirname,
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
     'prettier/prettier': ['error'],
     // 以下针对airbnb配置
+    'no-unused-vars': ['warn'],
     'react/jsx-filename-extension': [
       'error',
-      { extensions: ['.js', '.jsx', '.tsx', '.ts'] },
+      { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     ],
-    'no-unused-vars': ['warn'],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
   },
   settings: {
     'import/resolver': {
-      typescript: {},
+      typescript: {
+        project: './tsconfig.json',
+      },
       node: {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
         moduleDirectory: ['node_modules', 'src/'],

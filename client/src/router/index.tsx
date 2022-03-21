@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Home from '@/views/Home/index.tsx';
-import NotFound from '@/component/notFound.tsx';
-import ProjectManagement from '@/views/ProjectManagement/index.tsx';
-import ProjectManagementList from '@/views/ProjectManagement/List/index.tsx';
-import ProjectManagementDetail from '@/views/ProjectManagement/Detail/index.tsx';
+import Home from '@/views/Home';
+import NotFound from '@/component/notFound';
+import ProjectManagement from '@/views/ProjectManagement';
+import ProjectManagementList from '@/views/ProjectManagement/List';
+import ProjectManagementDetail from '@/views/ProjectManagement/Detail';
 
 type RouterType = {
   path: string;
@@ -67,7 +67,9 @@ export const routerList: Array<RouterType> = [
 function RouterView({ router, path }: RouterViewType) {
   const tempPath = path ? `${path}/${router.path}` : router.path;
   if (!router.index && !router.path) {
-    return <Route key={`${path}Not`} path='404' element={<NotFound />} />;
+    return (
+      <Route key={`${path as string}Not`} path='404' element={<NotFound />} />
+    );
   }
   if (!router.children) {
     return <Route key={tempPath} path={router.path} element={router.element} />;

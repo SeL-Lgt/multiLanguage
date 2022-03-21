@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout } from 'antd';
 import { Content, Header } from 'antd/lib/layout/layout';
-import RouterInit from '@/router/index.tsx';
+import RouterInit from '@/router';
 
 function App() {
   return (
