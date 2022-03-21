@@ -1,6 +1,6 @@
 import React from 'react';
 
-function NotFound(): JSX.Element {
+function NotFound() {
   return <div>404</div>;
 }
 

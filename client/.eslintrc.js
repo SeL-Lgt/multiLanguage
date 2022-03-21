@@ -12,11 +12,8 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 'latest',
-    sourceType: 'module',
+    project: './tsconfig.json', // + 新增 parserOptions 配置
+    tsconfigRootDir: __dirname,
   },
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
@@ -27,5 +24,14 @@ module.exports = {
       { extensions: ['.js', '.jsx', '.tsx', '.ts'] },
     ],
     'no-unused-vars': ['warn'],
+  },
+  settings: {
+    'import/resolver': {
+      typescript: {},
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        moduleDirectory: ['node_modules', 'src/'],
+      },
+    },
   },
 };
