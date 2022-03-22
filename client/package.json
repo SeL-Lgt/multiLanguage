@@ -8,9 +8,11 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "npm run eslint && npm run lint:css",
-    "lint:css": "stylelint src/**/*.less --fix  --custom-syntax postcss-less",
+    "lint:css": "stylelint src/**/*.{less,css} --fix  --custom-syntax postcss-less",
     "pretty": "prettier --write ./src",
-    "eslint": "eslint --fix ./src"
+    "eslint": "eslint --fix ./src",
+    "generate-css-typesInit": "tailwindcss-classnames -i tailwind.config.js -o tailwindcss-classnames.ts",
+    "generate-css-typesExpand": "tailwindcss-classnames -x tailwindcss-classnames-expand.ts -o tailwindcss-classnames.ts"
   },
   "dependencies": {
     "antd": "^4.19.2",
@@ -26,6 +28,7 @@
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
     "@vitejs/plugin-react": "^1.0.7",
+    "autoprefixer": "^10.4.4",
     "eslint": "^8.11.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
@@ -36,6 +39,7 @@
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.3.0",
     "less-loader": "^7.3.0",
+    "postcss": "^8.4.12",
     "postcss-less": "^6.0.0",
     "prettier": "^2.6.0",
     "prettier-eslint": "^13.0.0",
@@ -43,6 +47,8 @@
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-standard": "^25.0.0",
     "stylelint-order": "^5.0.0",
+    "tailwindcss": "^3.0.23",
+    "tailwindcss-classnames": "^3.0.3",
     "typescript": "^4.5.4",
     "vite": "^2.8.0",
     "vite-plugin-imp": "^2.1.6"
