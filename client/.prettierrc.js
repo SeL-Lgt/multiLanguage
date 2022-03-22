@@ -8,7 +8,7 @@ module.exports = {
   // 4.结尾是否添加分号
   semi: true,
   // 5.使用单引号(singleQuote: <bool>)
-  singleQuote: false,
+  singleQuote: true,
   // 6.object对象中key值是否加引号（quoteProps: "<as-needed|consistent|preserve>"）as-needed只有在需求要的情况下加引号，consistent是有一个需要引号就统一加，preserve是保留用户输入的引号
   quoteProps: 'as-needed',
   // 7.在jsx文件中的引号需要单独设置（jsxSingleQuote: <bool>）

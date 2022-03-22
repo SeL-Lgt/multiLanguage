@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "npm run eslint && vite --host",
+    "start": "npm run lint && vite --host",
     "dev": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "lint": "npm run eslint && npm run lint:css",
+    "lint:css": "stylelint src/**/*.less --fix  --custom-syntax postcss-less",
     "pretty": "prettier --write ./src",
-    "eslint": "eslint --fix ./src",
-    "lint:css": "stylelint src/**/*.less --fix  --custom-syntax postcss-less"
+    "eslint": "eslint --fix ./src"
   },
   "dependencies": {
     "antd": "^4.19.2",
