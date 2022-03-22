@@ -2,4 +2,5 @@
 *.less
 *.scss
 *.sass
-node_modules
+/node_modules
+/dist
