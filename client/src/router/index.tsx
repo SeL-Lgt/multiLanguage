@@ -1,10 +1,10 @@
-import React, { ReactNode } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Home from '@/views/Home';
-import NotFound from '@/component/notFound';
-import ProjectManagement from '@/views/ProjectManagement';
-import ProjectManagementList from '@/views/ProjectManagement/List';
-import ProjectManagementDetail from '@/views/ProjectManagement/Detail';
+import React, { ReactNode } from "react";
+import { Routes, Route } from "react-router-dom";
+import Home from "@/views/Home";
+import NotFound from "@/component/notFound";
+import ProjectManagement from "@/views/ProjectManagement";
+import ProjectManagementList from "@/views/ProjectManagement/List";
+import ProjectManagementDetail from "@/views/ProjectManagement/Detail";
 
 type RouterType = {
   path: string;
@@ -25,40 +25,40 @@ type RouterViewType = {
 
 export const routerList: Array<RouterType> = [
   {
-    path: '/',
+    path: "/",
     meta: {
-      title: '首页',
+      title: "首页",
     },
     element: <Home />,
   },
   {
-    path: '/projectManagement',
+    path: "/projectManagement",
     meta: {
-      title: '项目模块管理',
+      title: "项目模块管理",
     },
     element: <ProjectManagement />,
     children: [
       {
-        path: '',
+        path: "",
         index: true,
         meta: {
-          title: '项目模块管理',
+          title: "项目模块管理",
         },
         element: <ProjectManagementList />,
       },
       {
-        path: 'detail',
+        path: "detail",
         meta: {
-          title: '模块详情',
+          title: "模块详情",
         },
         element: <ProjectManagementDetail />,
       },
     ],
   },
   {
-    path: '*',
+    path: "*",
     meta: {
-      title: '404',
+      title: "404",
     },
     element: <NotFound />,
   },
