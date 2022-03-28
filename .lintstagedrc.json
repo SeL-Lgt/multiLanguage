@@ -1,5 +1,5 @@
 {
-  "*.{js,jsx,ts,tsx}": ["npm run lint"],
+  "*.{js,jsx,ts,tsx}": ["npm run eslint"],
   "*.md": ["npm run pretty"],
-  "*.{css,less,scss,sass}":["npm run lint:css"]
+  "*.{css,less,scss,sass}": ["npm run lint:css"]
 }

@@ -10,12 +10,13 @@
     "lint": "npm run eslint && npm run lint:css",
     "lint:css": "stylelint ./**/*.{less,css} --fix --custom-syntax postcss-less",
     "pretty": "prettier --write .",
-    "eslint": "eslint --fix ./src",
+    "eslint": "eslint --fix .",
     "generate-css-typesInit": "tailwindcss-classnames -i tailwind.config.js -o tailwindcss-classnames.ts",
     "generate-css-typesExpand": "tailwindcss-classnames -x tailwindcss-classnames-expand.ts -o tailwindcss-classnames.ts",
     "prepare": "husky install"
   },
   "dependencies": {
+    "@types/prop-types": "^15.7.4",
     "antd": "^4.19.2",
     "less": "^4.1.2",
     "react": "^17.0.2",

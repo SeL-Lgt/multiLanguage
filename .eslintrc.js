@@ -37,6 +37,16 @@ module.exports = {
         tsx: 'never',
       },
     ],
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: true,
+      },
+    ],
+    'no-use-before-define': [
+      'error',
+      { functions: false, classes: false, variables: false },
+    ],
   },
   settings: {
     'import/resolver': {

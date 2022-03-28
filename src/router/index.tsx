@@ -1,16 +1,19 @@
 import React, { ReactNode } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from '@/views/Home';
-import NotFound from '@/component/notFound';
+import CNotFound from '@/component/Common/CNotFound';
 import ProjectManagement from '@/views/ProjectManagement';
 import ProjectManagementList from '@/views/ProjectManagement/List';
 import ProjectManagementDetail from '@/views/ProjectManagement/Detail';
+import LanguageIndexManagement from '@/views/LanguageIndexManagement';
+import CopyWritingManagement from '@/views/CopyWritingManagement';
 
-type RouterType = {
+export type RouterType = {
   path: string;
   index?: boolean;
   meta: {
     title: string;
+    noShowMenu?: boolean;
     [key: string]: unknown;
   };
   redirect?: string;
@@ -18,7 +21,7 @@ type RouterType = {
   children?: Array<RouterType>;
 };
 
-type RouterViewType = {
+export type RouterViewType = {
   router: RouterType;
   path: string | null | undefined;
 };
@@ -43,6 +46,7 @@ export const routerList: Array<RouterType> = [
         index: true,
         meta: {
           title: '项目模块管理',
+          noShowMenu: true,
         },
         element: <ProjectManagementList />,
       },
@@ -50,17 +54,32 @@ export const routerList: Array<RouterType> = [
         path: 'detail',
         meta: {
           title: '模块详情',
+          noShowMenu: true,
         },
         element: <ProjectManagementDetail />,
       },
     ],
   },
   {
+    path: '/languageIndexManagement',
+    meta: {
+      title: '语言标识管理',
+    },
+    element: <LanguageIndexManagement />,
+  },
+  {
+    path: '/copyWritingManagement',
+    meta: {
+      title: '文案管理',
+    },
+    element: <CopyWritingManagement />,
+  },
+  {
     path: '*',
     meta: {
       title: '404',
     },
-    element: <NotFound />,
+    element: <CNotFound />,
   },
 ];
 
@@ -68,7 +87,7 @@ function RouterView({ router, path }: RouterViewType) {
   const tempPath = path ? `${path}/${router.path}` : router.path;
   if (!router.index && !router.path) {
     return (
-      <Route key={`${path as string}Not`} path='404' element={<NotFound />} />
+      <Route key={`${path as string}Not`} path='404' element={<CNotFound />} />
     );
   }
   if (!router.children) {

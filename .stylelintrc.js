@@ -1,14 +1,14 @@
 module.exports = {
   processors: [],
   plugins: ["stylelint-order"],
-  extends: ["stylelint-config-standard", "stylelint-config-css-modules"],
+  extends: ["stylelint-config-standard", "stylelint-config-css-modules", "prettier"],
   rules: {
     "selector-class-pattern": [
       // 命名规范 -
       "^([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
       {
-        message: "Expected class selector to be kebab-case",
-      },
+        message: "Expected class selector to be kebab-case"
+      }
     ],
     "string-quotes": "single", // 单引号
     "at-rule-empty-line-before": null,
@@ -25,8 +25,8 @@ module.exports = {
       2,
       {
         // 指定缩进  warning 提醒
-        severity: "warning",
-      },
+        severity: "warning"
+      }
     ],
     "order/properties-order": [
       // 规则顺序
@@ -104,7 +104,7 @@ module.exports = {
       "filter",
       "visibility",
       "size",
-      "transform",
-    ],
-  },
+      "transform"
+    ]
+  }
 };
