@@ -45,8 +45,14 @@ module.exports = {
     ],
     'no-use-before-define': [
       'error',
-      { functions: false, classes: false, variables: false },
+      {
+        functions: false,
+        classes: false,
+        variables: false,
+      },
     ],
+    'react/default-props-match-prop-types': 0,
+    'react/require-default-props': 0,
   },
   settings: {
     'import/resolver': {

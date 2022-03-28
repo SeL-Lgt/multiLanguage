@@ -53,6 +53,7 @@ function LanguageIndexManagement() {
   const clickEven = (item: FormDataType, type: TitleType = 'Edit') => {
     setFormData(item);
     setFormType(type);
+    console.log(languageIndexFormRef.current);
   };
 
   return (
