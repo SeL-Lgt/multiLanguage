@@ -11,7 +11,10 @@ export default defineConfig({
       libList: [
         {
           libName: 'antd',
-          style: (name) => `antd/lib/${name}/style/index.less`,
+          libDirectory: 'es',
+          style: () => `antd/dist/antd.less`,
+          // TODO：按需引入-antd组件内部用了 未引入的组件 导致样式丢失
+          // style: (name) => `antd/es/${name}/style/index.less`,
         },
       ],
     }),
@@ -30,4 +33,5 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  server: { port: 8080 },
 });
