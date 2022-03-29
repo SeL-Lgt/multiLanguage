@@ -35,6 +35,13 @@ export const routerList: Array<RouterType> = [
     element: <Home />,
   },
   {
+    path: '/languageIndexManagement',
+    meta: {
+      title: '语言标识管理',
+    },
+    element: <LanguageIndexManagement />,
+  },
+  {
     path: '/projectManagement',
     meta: {
       title: '项目模块管理',
@@ -51,7 +58,7 @@ export const routerList: Array<RouterType> = [
         element: <ProjectManagementList />,
       },
       {
-        path: 'detail',
+        path: 'detail/:id',
         meta: {
           title: '模块详情',
           noShowMenu: true,
@@ -59,13 +66,6 @@ export const routerList: Array<RouterType> = [
         element: <ProjectManagementDetail />,
       },
     ],
-  },
-  {
-    path: '/languageIndexManagement',
-    meta: {
-      title: '语言标识管理',
-    },
-    element: <LanguageIndexManagement />,
   },
   {
     path: '/copyWritingManagement',
