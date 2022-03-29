@@ -1,10 +1,8 @@
-import React, {
-  ForwardedRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react';
-import { Modal } from 'antd';
+import React, { Attributes, useEffect, useState } from 'react';
+import { Form, Input, Modal, Select } from 'antd';
+import languageUtil from '@/utils/languageUtil';
+
+const { Option } = Select;
 
 export type TitleType = 'Edit' | 'New';
 export type FormDataType = {
@@ -13,39 +11,132 @@ export type FormDataType = {
   application: string;
 };
 
-interface PropsType {
+interface PropsType extends Attributes {
   type: TitleType;
+  visible: boolean;
   formData?: FormDataType;
+  closeEvent?: () => unknown;
 }
 
-const LanguageIndexForm = React.forwardRef(
-  (props: PropsType, ref: ForwardedRef<unknown>) => {
-    const { type, formData } = props;
-    const [isShow, setIsShow] = useState<boolean>(false);
-    const [title, setTitle] = useState<string>('');
+function LanguageIndexForm(props: PropsType) {
+  const { type, formData, visible, closeEvent } = props;
+  const [isShow, setIsShow] = useState<boolean>(visible);
+  // 对话框标题
+  const [title, setTitle] = useState<string>('');
+  const [form] = Form.useForm();
 
-    useImperativeHandle(
-      ref,
-      () => ({
-        show: () => changeShow(),
-      }),
-      [],
-    );
+  useEffect(() => {
+    setTitle(type === 'Edit' ? '修改语言信息' : '新增语言信息');
+    form.setFieldsValue(formData);
+  }, []);
 
-    useEffect(() => {
-      setTitle(type === 'Edit' ? '修改语言信息' : '新增语言信息');
-    }, []);
+  /**
+   * 关闭对话框
+   * @callback closeEvent 调用父级方法
+   */
+  const closeModal = () => {
+    setIsShow(false);
+    if (closeEvent) {
+      closeEvent();
+    }
+  };
 
-    const changeShow = () => {
-      setIsShow(!isShow);
-    };
+  /**
+   * 提交表单，成功后关闭对话框
+   */
+  const okModal = () => {
+    form
+      .validateFields()
+      .then((res) => {
+        console.log(res);
+        closeModal();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-    return (
-      <Modal visible={isShow} title={title}>
-        <div>{formData}</div>
-      </Modal>
-    );
-  },
-);
+  /**
+   * 语言列表下拉框
+   * @return {Array<Element>} Option标签
+   */
+  const languageSelectView = () => {
+    const languageList = languageUtil.getList();
+    const optionView = languageList.map((item) => (
+      <Option key={item.key} value={item.text}>
+        {item.text}
+      </Option>
+    ));
+    return optionView;
+  };
+
+  const languageSelectChange = (value: string) => {
+    form.setFieldsValue({
+      keyId: languageUtil.findOfName(value)?.key,
+    });
+  };
+
+  return (
+    <Modal
+      forceRender
+      visible={isShow}
+      title={title}
+      onOk={okModal}
+      onCancel={closeModal}
+    >
+      <Form
+        name='languageForm'
+        layout='horizontal'
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 18 }}
+        form={form}
+      >
+        <Form.Item
+          label='对应国家语言'
+          name='language'
+          rules={[
+            {
+              required: true,
+              message: '请选择对应国家语言',
+            },
+          ]}
+        >
+          <Select
+            showSearch
+            onChange={languageSelectChange}
+            optionFilterProp='children'
+            disabled={type === 'Edit'}
+          >
+            {languageSelectView()}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          label='语言标识'
+          name='keyId'
+          rules={[
+            {
+              required: true,
+              message: '请选择对应语言标识',
+            },
+          ]}
+        >
+          <Input disabled />
+        </Form.Item>
+        <Form.Item
+          label='用途描述'
+          name='application'
+          rules={[
+            {
+              required: true,
+              message: '请补充用途描述',
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+}
 
 export default LanguageIndexForm;

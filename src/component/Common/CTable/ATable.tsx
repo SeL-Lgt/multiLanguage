@@ -1,8 +1,7 @@
 import React from 'react';
 import { Table, Pagination } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table/interface';
-import PropTypes from 'prop-types';
-import { space } from '~/tailwindcss-classnames';
+import { classnames, space, textAlign } from '~/tailwindcss-classnames';
 
 type TableConfig = {
   showHeader?: boolean;
@@ -27,7 +26,7 @@ export interface TablePropsType {
 export function AntdTable(props: TablePropsType) {
   const { config, data } = props;
   return (
-    <div className={space('space-y-5')}>
+    <div className={classnames(space('space-y-5'))}>
       <Table
         rowKey={(record) => JSON.stringify(record)}
         columns={data.columns}
@@ -37,23 +36,12 @@ export function AntdTable(props: TablePropsType) {
         scroll={config?.scroll}
         bordered={config?.bordered}
       />
-      {config?.pagination && <Pagination />}
+      {config?.pagination && (
+        <Pagination className={classnames(textAlign('text-right'))} />
+      )}
     </div>
   );
 }
-
-AntdTable.propTypes = {
-  config: PropTypes.shape({
-    bordered: PropTypes.bool,
-    pagination: PropTypes.instanceOf(Object),
-    showHeader: PropTypes.bool,
-    scroll: PropTypes.instanceOf(Object),
-  }),
-  data: PropTypes.shape({
-    columns: PropTypes.instanceOf(Array),
-    dataSource: PropTypes.instanceOf(Array),
-  }),
-};
 
 AntdTable.defaultProps = {
   config: {
