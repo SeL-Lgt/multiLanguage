@@ -5,7 +5,7 @@ import { AntdTable, TablePropsType } from '@/component/Common/CTable/ATable';
 import LanguageIndexForm, {
   FormDataType,
   TitleType,
-} from '@/views/LanguageIndexManagement/component/form';
+} from '@/views/LanguageIndexManagement/component/LanguageIndexForm';
 
 type ClickItemType = {
   item?: FormDataType;
@@ -39,11 +39,8 @@ function LanguageIndexManagement() {
           dataIndex: 'operating',
           key: 'operating',
           align: 'center',
-          render: (text: string, item: object) => (
-            <Button
-              type='link'
-              onClick={() => clickFormEvent({ item } as ClickItemType)}
-            >
+          render: (text: string, item: FormDataType) => (
+            <Button type='link' onClick={() => clickFormEvent({ item })}>
               操作
             </Button>
           ),
