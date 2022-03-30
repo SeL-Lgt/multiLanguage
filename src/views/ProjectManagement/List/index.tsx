@@ -71,7 +71,7 @@ function ProjectManagement() {
       ],
       dataSource: [
         {
-          modulesKey: '1123',
+          modulesKey: 'DMS-PC',
           name: '1123',
           number: '1123',
           language: '1123',
@@ -93,6 +93,10 @@ function ProjectManagement() {
   // 控制表单显示
   const [showModal, setShowModal] = useState<boolean>(false);
 
+  /**
+   * 访问详情
+   * @param {object<ModulesDetailType>} item
+   */
   const checkDetails = (item: ModulesDetailType) => {
     navigate(`/projectManagement/detail/${item.modulesKey}`);
   };

@@ -34,7 +34,7 @@ export function AntdTable(props: TablePropsType) {
         showHeader={config?.showHeader}
         pagination={false}
         scroll={config?.scroll}
-        bordered={config?.bordered}
+        bordered={config?.bordered || true}
       />
       {config?.pagination && (
         <Pagination className={classnames(textAlign('text-right'))} />
