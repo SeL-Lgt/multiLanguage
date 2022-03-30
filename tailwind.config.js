@@ -1,4 +1,7 @@
 module.exports = {
+  corePlugins: {
+    preflight: false,
+  },
   content: ['./index.html', './src/**/*.{html,js,jsx,ts,tsx}'],
   theme: {
     minHeight: {
