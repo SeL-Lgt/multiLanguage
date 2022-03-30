@@ -1,18 +1,15 @@
 import React, { Attributes, useEffect, useState } from 'react';
 import { Form, Input, Modal, Select } from 'antd';
 import languageUtil from '@/utils/languageUtil';
+import {
+  FormDataType,
+  FormType,
+} from '@/views/LanguageIndexManagement/index.d';
 
 const { Option } = Select;
 
-export type TitleType = 'Edit' | 'New';
-export type FormDataType = {
-  keyId: string;
-  language: string;
-  application: string;
-};
-
 interface PropsType extends Attributes {
-  type: TitleType;
+  type: FormType;
   visible: boolean;
   formData?: FormDataType;
   closeEvent?: () => unknown;

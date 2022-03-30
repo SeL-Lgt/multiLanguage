@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { Button } from 'antd';
 import classnames, { space } from '~/tailwindcss-classnames';
 import { AntdTable, TablePropsType } from '@/component/Common/CTable/ATable';
-import LanguageIndexForm, {
+import LanguageIndexForm from '@/views/LanguageIndexManagement/component/LanguageIndexForm';
+import {
   FormDataType,
-  TitleType,
-} from '@/views/LanguageIndexManagement/component/LanguageIndexForm';
+  FormType,
+} from '@/views/LanguageIndexManagement/index.d';
 
 type ClickItemType = {
   item?: FormDataType;
-  type?: TitleType;
+  type?: FormType;
 };
 
 function LanguageIndexManagement() {
@@ -41,7 +42,7 @@ function LanguageIndexManagement() {
           align: 'center',
           render: (text: string, item: FormDataType) => (
             <Button type='link' onClick={() => clickFormEvent({ item })}>
-              操作
+              编辑
             </Button>
           ),
         },
@@ -62,14 +63,14 @@ function LanguageIndexManagement() {
     application: '',
   });
   // 表单类型---Edit：修改，New: 创建
-  const [formType, setFormType] = useState<TitleType>('Edit');
+  const [formType, setFormType] = useState<FormType>('Edit');
   // 控制表单显示
   const [showModal, setShowModal] = useState<boolean>(false);
 
   /**
    * 点击表单事件处理
    * @param {FormDataType} [item = {keyId: '',language: '',application: ''}] 表单数据
-   * @param {TitleType} [type = 'Edit'] 表单展示类型
+   * @param {FormType} [type = 'Edit'] 表单展示类型
    */
   const clickFormEvent = ({
     item = {
