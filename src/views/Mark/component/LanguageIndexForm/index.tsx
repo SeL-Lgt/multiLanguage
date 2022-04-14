@@ -78,7 +78,6 @@ function LanguageIndexForm(props: PropsType) {
   };
 
   const languageSelectChange = (value: string, { ...item }) => {
-    console.log(item);
     form.setFieldsValue({
       langKey: item.key,
     });

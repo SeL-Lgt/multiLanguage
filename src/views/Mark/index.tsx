@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'antd';
 import classnames, { space } from '~/tailwindcss-classnames';
 import { AntdTable, TablePropsType } from '@/component/Common/CTable/ATable';
@@ -63,6 +63,9 @@ function LanguageIndexManagement() {
     getMarkList();
   }, []);
 
+  /**
+   * 获取列表信息
+   */
   const getMarkList = () => {
     const { ...temp } = tableData;
     MarkServices.queryMarkList({ isUsed: true }).then((res) => {
