@@ -5,7 +5,7 @@ import CNotFound from '@/component/Common/CNotFound';
 import ProjectManagement from '@/views/ProjectManagement';
 import ProjectManagementList from '@/views/ProjectManagement/List';
 import ProjectManagementDetail from '@/views/ProjectManagement/Detail';
-import LanguageIndexManagement from '@/views/LanguageIndexManagement';
+import LanguageIndexManagement from '@/views/Mark';
 import CopyWritingManagement from '@/views/CopyWritingManagement';
 
 export type RouterType = {

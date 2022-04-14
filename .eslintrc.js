@@ -53,6 +53,7 @@ module.exports = {
     ],
     'react/default-props-match-prop-types': 0,
     'react/require-default-props': 0,
+    'no-underscore-dangle': 0,
   },
   settings: {
     'import/resolver': {

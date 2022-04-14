@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from 'antd';
 import classnames, { space } from '~/tailwindcss-classnames';
 import { AntdTable, TablePropsType } from '@/component/Common/CTable/ATable';
-import LanguageIndexForm from '@/views/LanguageIndexManagement/component/LanguageIndexForm';
-import {
-  FormDataType,
-  FormType,
-} from '@/views/LanguageIndexManagement/index.d';
+import LanguageIndexForm from '@/views/Mark/component/LanguageIndexForm';
+import MarkServices from '@/api/mark';
+import MarkType from '@/type/mark';
 
 type ClickItemType = {
-  item?: FormDataType;
-  type?: FormType;
+  item?: MarkType.MarkItem;
+  type?: MarkType.FormType;
 };
 
 function LanguageIndexManagement() {
@@ -19,20 +17,20 @@ function LanguageIndexManagement() {
       columns: [
         {
           title: '语言标识Key',
-          dataIndex: 'keyId',
-          key: 'keyId',
+          dataIndex: 'langKey',
+          key: 'langKey',
           align: 'center',
         },
         {
           title: '对应国家语言',
-          dataIndex: 'language',
-          key: 'language',
+          dataIndex: 'langText',
+          key: 'langText',
           align: 'center',
         },
         {
           title: '用途',
-          dataIndex: 'application',
-          key: 'application',
+          dataIndex: 'remark',
+          key: 'remark',
           align: 'center',
         },
         {
@@ -40,44 +38,46 @@ function LanguageIndexManagement() {
           dataIndex: 'operating',
           key: 'operating',
           align: 'center',
-          render: (text: string, item: FormDataType) => (
+          render: (text: string, item: MarkType.MarkItem) => (
             <Button type='link' onClick={() => clickFormEvent({ item })}>
               编辑
             </Button>
           ),
         },
       ],
-      dataSource: [
-        {
-          keyId: 'zh-CN',
-          language: '中国(简体)',
-          application: '1231241',
-        },
-      ],
+      dataSource: [],
     },
   });
   // 传给表单子组件的数据
-  const [formData, setFormData] = useState<FormDataType>({
-    keyId: '',
-    language: '',
-    application: '',
+  const [formData, setFormData] = useState<MarkType.MarkItem>({
+    langKey: '',
+    langText: '',
+    remark: '',
   });
   // 表单类型---Edit：修改，New: 创建
-  const [formType, setFormType] = useState<FormType>('Edit');
+  const [formType, setFormType] = useState<MarkType.FormType>('Edit');
   // 控制表单显示
   const [showModal, setShowModal] = useState<boolean>(false);
 
+  useEffect(() => {
+    getMarkList();
+  }, []);
+
+  const getMarkList = () => {
+    const { ...temp } = tableData;
+    MarkServices.queryMarkList({ isUsed: true }).then((res) => {
+      temp.data.dataSource = res?.data;
+      setTableData(temp);
+    });
+  };
+
   /**
    * 点击表单事件处理
-   * @param {FormDataType} [item = {keyId: '',language: '',application: ''}] 表单数据
+   * @param {MarkItem} [item = {langKey: '',langText: '',remark: ''}] 表单数据
    * @param {FormType} [type = 'Edit'] 表单展示类型
    */
   const clickFormEvent = ({
-    item = {
-      keyId: '',
-      language: '',
-      application: '',
-    },
+    item = { langKey: '', langText: '', remark: '' },
     type = 'Edit',
   }: ClickItemType) => {
     setFormData(item);
@@ -90,6 +90,7 @@ function LanguageIndexManagement() {
    */
   const closeModal = () => {
     setShowModal(false);
+    getMarkList();
   };
 
   return (
@@ -98,13 +99,15 @@ function LanguageIndexManagement() {
         新增语言
       </Button>
       <AntdTable data={tableData.data} />
-      <LanguageIndexForm
-        key={showModal.toString()}
-        visible={showModal}
-        closeEvent={closeModal}
-        type={formType}
-        formData={formData}
-      />
+      {showModal && (
+        <LanguageIndexForm
+          key={showModal.toString()}
+          visible={showModal}
+          closeEvent={closeModal}
+          type={formType}
+          formData={formData}
+        />
+      )}
     </div>
   );
 }

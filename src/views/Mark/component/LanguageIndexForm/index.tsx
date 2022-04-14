@@ -1,17 +1,12 @@
 import React, { Attributes, useEffect, useState } from 'react';
 import { Form, Input, Modal, Select } from 'antd';
-import languageUtil from '@/utils/languageUtil';
-import {
-  FormDataType,
-  FormType,
-} from '@/views/LanguageIndexManagement/index.d';
-
-const { Option } = Select;
+import MarkServices from '@/api/mark';
+import MarkType from '@/type/mark';
 
 interface PropsType extends Attributes {
-  type: FormType;
+  type: MarkType.FormType;
   visible: boolean;
-  formData?: FormDataType;
+  formData?: MarkType.MarkItem;
   closeEvent?: () => unknown;
 }
 
@@ -20,10 +15,17 @@ function LanguageIndexForm(props: PropsType) {
   const [isShow, setIsShow] = useState<boolean>(visible);
   // 对话框标题
   const [title, setTitle] = useState<string>('');
+  const [languageList, setLanguageList] = useState<Array<MarkType.MarkItem>>();
   const [form] = Form.useForm();
 
   useEffect(() => {
     setTitle(type === 'Edit' ? '修改语言信息' : '新增语言信息');
+
+    MarkServices.queryMarkList({
+      isUsed: type === 'Edit',
+    }).then((res) => {
+      setLanguageList(res.data);
+    });
     form.setFieldsValue(formData);
   }, []);
 
@@ -44,9 +46,18 @@ function LanguageIndexForm(props: PropsType) {
   const okModal = () => {
     form
       .validateFields()
-      .then((res) => {
-        console.log(res);
-        closeModal();
+      .then((res: MarkType.MarkItem) => {
+        switch (type) {
+          case 'Edit':
+            MarkServices.updateMark(res).then(() => {
+              closeModal();
+            });
+            break;
+          default:
+            MarkServices.addMark(res).then(() => {
+              closeModal();
+            });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -58,18 +69,18 @@ function LanguageIndexForm(props: PropsType) {
    * @return {Array<Element>} Option标签
    */
   const languageSelectView = () => {
-    const languageList = languageUtil.getList();
-    const optionView = languageList.map((item) => (
-      <Option key={item.key} value={item.text}>
-        {item.text}
-      </Option>
+    const optionView = languageList?.map((item) => (
+      <Select.Option key={item.langKey} value={item.langText}>
+        {item.langText}
+      </Select.Option>
     ));
     return optionView;
   };
 
-  const languageSelectChange = (value: string) => {
+  const languageSelectChange = (value: string, { ...item }) => {
+    console.log(item);
     form.setFieldsValue({
-      keyId: languageUtil.findOfName(value)?.key,
+      langKey: item.key,
     });
   };
 
@@ -90,7 +101,7 @@ function LanguageIndexForm(props: PropsType) {
       >
         <Form.Item
           label='对应国家语言'
-          name='language'
+          name='langText'
           rules={[
             {
               required: true,
@@ -109,7 +120,7 @@ function LanguageIndexForm(props: PropsType) {
         </Form.Item>
         <Form.Item
           label='语言标识'
-          name='keyId'
+          name='langKey'
           rules={[
             {
               required: true,
@@ -121,7 +132,7 @@ function LanguageIndexForm(props: PropsType) {
         </Form.Item>
         <Form.Item
           label='用途描述'
-          name='application'
+          name='remark'
           rules={[
             {
               required: true,
