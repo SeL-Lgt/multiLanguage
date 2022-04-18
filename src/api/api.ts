@@ -7,7 +7,7 @@ export class MarkApi {
 }
 
 export class ModulesApi {
-  static addModules = '/module/addMoules';
+  static addModules = '/module/addModules';
 
   static queryModulesList = '/module/queryModulesList';
 
