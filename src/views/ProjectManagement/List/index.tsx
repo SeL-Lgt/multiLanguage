@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classnames, {
   alignItems,
   display,
   justifyContent,
   space,
   whitespace,
+  width,
 } from '~/tailwindcss-classnames';
-import { Button, Input } from 'antd';
+import { Button, Input, Select } from 'antd';
 import { AntdTable, TablePropsType } from '@/component/Common/CTable/ATable';
 import { useNavigate } from 'react-router-dom';
 import ParentForm from '@/views/ProjectManagement/component/ParentForm';
-import { ModulesDetailType, FormType } from '@/views/ProjectManagement/index.d';
+import ModulesType from '@/type/modules';
+import ModulesServices from '@/api/modules';
 
 type ClickItemType = {
-  item?: ModulesDetailType;
-  type?: FormType;
+  item?: ModulesType.ModulesItem;
+  type?: ModulesType.FormType;
 };
 
 function ProjectManagement() {
@@ -27,7 +29,7 @@ function ProjectManagement() {
           dataIndex: 'modulesKey',
           key: 'modulesKey',
           align: 'center',
-          render: (text: string, item: ModulesDetailType) => (
+          render: (text: string, item: ModulesType.ModulesItem) => (
             <Button type='link' onClick={() => checkDetails(item)}>
               {text}
             </Button>
@@ -35,8 +37,8 @@ function ProjectManagement() {
         },
         {
           title: '项目名字',
-          dataIndex: 'name',
-          key: 'name',
+          dataIndex: 'modulesName',
+          key: 'modulesName',
           align: 'center',
         },
         {
@@ -46,15 +48,9 @@ function ProjectManagement() {
           align: 'center',
         },
         {
-          title: '开放语言',
-          dataIndex: 'language',
-          key: 'language',
-          align: 'center',
-        },
-        {
           title: '备注',
-          dataIndex: 'mark',
-          key: 'mark',
+          dataIndex: 'remark',
+          key: 'remark',
           align: 'center',
         },
         {
@@ -62,7 +58,7 @@ function ProjectManagement() {
           dataIndex: 'operating',
           key: 'operating',
           align: 'center',
-          render: (text: string, item: ModulesDetailType) => (
+          render: (text: string, item: ModulesType.ModulesItem) => (
             <Button type='link' onClick={() => clickFormEvent({ item })}>
               编辑
             </Button>
@@ -72,47 +68,49 @@ function ProjectManagement() {
       dataSource: [
         {
           modulesKey: 'DMS-PC',
-          name: '1123',
+          modulesName: '1123',
           number: '1123',
           language: '1123',
-          mark: '1123',
+          remark: '1123',
         },
       ],
     },
   });
   // 传给表单子组件的数据
-  const [formData, setFormData] = useState<ModulesDetailType>({
+  const [formData, setFormData] = useState<ModulesType.ModulesItem>({
     modulesKey: '',
-    name: '',
-    number: '',
-    language: '',
-    mark: '',
+    modulesName: '',
+    remark: '',
   });
   // 表单类型---Edit：修改，New: 创建
-  const [formType, setFormType] = useState<FormType>('Edit');
+  const [formType, setFormType] = useState<ModulesType.FormType>('Edit');
   // 控制表单显示
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [nameList, setNameList] = useState<Array<ModulesType.queryModules>>();
+
+  useEffect(() => {
+    queryModulesNameList();
+    queryModulesList();
+  }, []);
 
   /**
    * 访问详情
-   * @param {object<ModulesDetailType>} item
+   * @param {object<ModulesType.ModulesItem>} item
    */
-  const checkDetails = (item: ModulesDetailType) => {
+  const checkDetails = (item: ModulesType.ModulesItem) => {
     navigate(`/projectManagement/detail/${item.modulesKey}`);
   };
 
   /**
    * 点击表单事件处理
-   * @param {ModulesDetailType} [item = {keyId: '',language: '',application: ''}] 表单数据
-   * @param {FormType} [type = 'Edit'] 表单展示类型
+   * @param {ModulesType.ModulesItem} [item = {keyId: '',language: '',application: ''}] 表单数据
+   * @param {ModulesType.FormType} [type = 'Edit'] 表单展示类型
    */
   const clickFormEvent = ({
     item = {
       modulesKey: '',
-      name: '',
-      number: '',
-      language: '',
-      mark: '',
+      modulesName: '',
+      remark: '',
     },
     type = 'Edit',
   }: ClickItemType) => {
@@ -125,7 +123,50 @@ function ProjectManagement() {
    * 关闭对话框
    */
   const closeModal = () => {
+    queryModulesNameList();
+    queryModulesList();
     setShowModal(false);
+  };
+
+  /**
+   * 查询列表详情
+   */
+  const queryModulesList = (params: ModulesType.queryModules = {}) => {
+    const { ...temp } = tableData;
+    ModulesServices.queryModulesList(params).then((res) => {
+      temp.data.dataSource = res.data;
+      setTableData(temp);
+    });
+  };
+
+  /**
+   * 查询父模块下拉详情
+   */
+  const queryModulesNameList = () => {
+    ModulesServices.queryModulesNameList().then((res) => {
+      setNameList(res.data);
+    });
+  };
+  /**
+   * 父模块名字下拉选择列表
+   */
+  const modulesNameSelectView = () => {
+    const optionView = nameList?.map((item) => (
+      <Select.Option key={item.modulesKey} value={item.modulesKey}>
+        {item.modulesKey}
+      </Select.Option>
+    ));
+    return optionView;
+  };
+
+  const modulesNameChange = (value: string) => {
+    queryModulesList({
+      modulesKey: value,
+    });
+  };
+
+  const modulesNameClear = () => {
+    queryModulesList();
   };
 
   return (
@@ -145,7 +186,15 @@ function ProjectManagement() {
           )}
         >
           <div>查询模块：</div>
-          <Input />
+          <Select
+            showSearch
+            allowClear
+            onChange={modulesNameChange}
+            className={classnames(width('w-52'))}
+            onClear={modulesNameClear}
+          >
+            {modulesNameSelectView()}
+          </Select>
         </div>
         <Button type='primary' onClick={() => clickFormEvent({ type: 'New' })}>
           新增父模块

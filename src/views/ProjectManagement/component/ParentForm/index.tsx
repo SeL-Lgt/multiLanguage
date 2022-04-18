@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Modal } from 'antd';
-import { FormType, ModulesDetailType } from '@/views/ProjectManagement/index.d';
+import ModulesType from '@/type/modules';
+import ModulesServices from '@/api/modules';
 
 type PropsType = {
-  type: FormType;
-  formData: ModulesDetailType;
+  type: ModulesType.FormType;
+  formData: ModulesType.ModulesItem;
   visible: boolean;
   closeEvent?: () => unknown;
 };
@@ -39,8 +40,21 @@ function ParentForm(props: PropsType) {
     form
       .validateFields()
       .then((res) => {
-        console.log(res);
-        closeModal();
+        switch (type) {
+          case 'Edit':
+            ModulesServices.updateModules({
+              id: formData.id,
+              updateUser: 'admin',
+              ...res,
+            }).then(() => {
+              closeModal();
+            });
+            break;
+          default:
+            ModulesServices.addModules(res).then(() => {
+              closeModal();
+            });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -76,7 +90,7 @@ function ParentForm(props: PropsType) {
         </Form.Item>
         <Form.Item
           label='项目名字'
-          name='name'
+          name='modulesName'
           rules={[
             {
               required: true,
@@ -86,19 +100,7 @@ function ParentForm(props: PropsType) {
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          label='开放语言'
-          name='language'
-          rules={[
-            {
-              required: true,
-              message: '请选择开放语言',
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item label='备注' name='mark'>
+        <Form.Item label='备注' name='remark'>
           <Input />
         </Form.Item>
       </Form>

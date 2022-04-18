@@ -1,7 +1,7 @@
 import request from '@/api/request';
 import MarkType from '@/type/mark.d';
 import type { Result } from '@/type/api.d';
-import MarkApi from '@/api/api';
+import { MarkApi } from '@/api/api';
 
 class MarkServices {
   /**
