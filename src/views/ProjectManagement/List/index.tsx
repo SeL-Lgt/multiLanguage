@@ -165,10 +165,6 @@ function ProjectManagement() {
     });
   };
 
-  const modulesNameClear = () => {
-    queryModulesList();
-  };
-
   return (
     <div className={classnames(space('space-y-5'))}>
       <div
@@ -191,7 +187,6 @@ function ProjectManagement() {
             allowClear
             onChange={modulesNameChange}
             className={classnames(width('w-52'))}
-            onClear={modulesNameClear}
           >
             {modulesNameSelectView()}
           </Select>
