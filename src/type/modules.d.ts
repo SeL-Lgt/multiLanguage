@@ -2,6 +2,7 @@ declare namespace ModulesType {
   type FormType = 'Edit' | 'New';
   type ModulesKey = string;
   type ModulesName = string;
+  type SubModulesName = string;
   interface queryModules {
     modulesKey?: ModulesKey;
     modulesName?: ModulesName;
@@ -11,6 +12,11 @@ declare namespace ModulesType {
     modulesKey: ModulesKey;
     modulesName: ModulesName;
     remark: string;
+  }
+
+  interface SubModulesItem {
+    modulesKey?: ModulesKey;
+    subModulesKey?: SubModulesName;
   }
 }
 

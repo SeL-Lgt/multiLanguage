@@ -6,11 +6,12 @@ import classnames, {
   display,
   fontSize,
   fontWeight,
-  justifyItems,
   space,
 } from '~/tailwindcss-classnames';
 import { AntdTable, TablePropsType } from '@/component/Common/CTable/ATable';
 import SonForm from '@/views/ProjectManagement/component/SonForm';
+import ModulesServices from '@/api/modules';
+import ModulesType from '@/type/modules';
 
 function ProjectManagementDetail() {
   const params = useParams();
@@ -21,8 +22,8 @@ function ProjectManagementDetail() {
       columns: [
         {
           title: '子模块Key',
-          dataIndex: 'submoduleKey',
-          key: 'submoduleKey',
+          dataIndex: 'subModulesKey',
+          key: 'subModulesKey',
           align: 'center',
         },
         {
@@ -30,8 +31,8 @@ function ProjectManagementDetail() {
           dataIndex: 'operating',
           key: 'operating',
           align: 'center',
-          render: (text: string, item: object) => (
-            <Button type='link' onClick={() => deleteModule({ item })}>
+          render: (text: string, item: ModulesType.SubModulesItem) => (
+            <Button type='link' onClick={() => deleteModule(item)}>
               删除
             </Button>
           ),
@@ -42,6 +43,21 @@ function ProjectManagementDetail() {
   });
   // 控制表单显示
   const [showModal, setShowModal] = useState<boolean>(false);
+  const modulesKey: ModulesType.ModulesKey | undefined = params.id;
+
+  useEffect(() => {
+    getSubModulesList();
+  }, []);
+
+  const getSubModulesList = () => {
+    const { ...temp } = tableData;
+    ModulesServices.querySubModulesList({
+      modulesKey,
+    }).then((res) => {
+      temp.data.dataSource = res.data;
+      setTableData(temp);
+    });
+  };
 
   /**
    * 返回上一页
@@ -54,8 +70,10 @@ function ProjectManagementDetail() {
    * 删除模块
    * @param item
    */
-  const deleteModule = (item: object) => {
-    console.log(item);
+  const deleteModule = (item: ModulesType.SubModulesItem) => {
+    ModulesServices.deleteSubModules(item).then(() => {
+      getSubModulesList();
+    });
   };
 
   /**
@@ -69,6 +87,7 @@ function ProjectManagementDetail() {
    * 关闭对话框
    */
   const closeModal = () => {
+    getSubModulesList();
     setShowModal(false);
   };
 
@@ -87,7 +106,7 @@ function ProjectManagementDetail() {
         <div className={classnames(fontSize('text-base'))}>
           当前所选模块：
           <span className={classnames(fontWeight('font-bold'))}>
-            {params.id}
+            {modulesKey}
           </span>
         </div>
       </div>
@@ -99,6 +118,7 @@ function ProjectManagementDetail() {
         key={showModal.toString()}
         visible={showModal}
         closeEvent={closeModal}
+        modulesKey={modulesKey}
       />
     </div>
   );

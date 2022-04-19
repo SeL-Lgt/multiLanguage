@@ -15,3 +15,11 @@ export class ModulesApi {
 
   static queryModulesNameList = '/module/queryModulesNameList';
 }
+
+export class SubModulesApi {
+  static addSubModules = '/subModule/addSubModules';
+
+  static querySubModulesList = '/subModule/querySubModulesList';
+
+  static deleteSubModules = '/subModule/deleteSubModules';
+}

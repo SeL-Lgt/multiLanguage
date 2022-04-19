@@ -1,5 +1,5 @@
 import request from '@/api/request';
-import { ModulesApi } from '@/api/api';
+import { ModulesApi, SubModulesApi } from '@/api/api';
 import { Result } from '@/type/api';
 import ModulesType from '@/type/modules';
 
@@ -49,6 +49,42 @@ class ModulesServices {
       url: ModulesApi.queryModulesNameList,
     });
     return res as Result<Array<ModulesType.queryModules>>;
+  };
+
+  /**
+   * 新增子模块
+   * @param data
+   */
+  static addSubModules = async (data: ModulesType.SubModulesItem) => {
+    const res = await request.post({
+      url: SubModulesApi.addSubModules,
+      data,
+    });
+    return res as Result<any>;
+  };
+
+  /**
+   * 查询子模块列表
+   * @param params
+   */
+  static querySubModulesList = async (params: ModulesType.SubModulesItem) => {
+    const res = await request.get({
+      url: SubModulesApi.querySubModulesList,
+      params,
+    });
+    return res as Result<Array<ModulesType.SubModulesItem>>;
+  };
+
+  /**
+   * 删除子模块
+   * @param data
+   */
+  static deleteSubModules = async (data: ModulesType.SubModulesItem) => {
+    const res = await request.delete({
+      url: SubModulesApi.deleteSubModules,
+      data,
+    });
+    return res as Result<any>;
   };
 }
 

@@ -1,15 +1,24 @@
 import { Form, Input, Modal } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import ModulesType from '@/type/modules';
+import ModulesServices from '@/api/modules';
 
 type PropsType = {
   visible: boolean;
   closeEvent?: () => unknown;
+  modulesKey?: ModulesType.ModulesKey;
 };
 
 function SonForm(props: PropsType) {
-  const { visible, closeEvent } = props;
+  const { visible, closeEvent, modulesKey } = props;
   const [isShow, setIsShow] = useState<boolean>(visible);
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      modulesKey,
+    });
+  });
 
   /**
    * 关闭对话框
@@ -29,8 +38,9 @@ function SonForm(props: PropsType) {
     form
       .validateFields()
       .then((res) => {
-        console.log(res);
-        closeModal();
+        ModulesServices.addSubModules(res).then(() => {
+          closeModal();
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -53,8 +63,20 @@ function SonForm(props: PropsType) {
         form={form}
       >
         <Form.Item
+          label='模块Key'
+          name='modulesKey'
+          rules={[
+            {
+              required: true,
+              message: '请输入模块Key',
+            },
+          ]}
+        >
+          <Input disabled />
+        </Form.Item>
+        <Form.Item
           label='子模块Key'
-          name='submoduleKey'
+          name='subModulesKey'
           rules={[
             {
               required: true,
