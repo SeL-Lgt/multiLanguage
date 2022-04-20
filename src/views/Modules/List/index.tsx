@@ -10,7 +10,7 @@ import classnames, {
 import { Button, Input, Select } from 'antd';
 import { AntdTable, TablePropsType } from '@/component/Common/CTable/ATable';
 import { useNavigate } from 'react-router-dom';
-import ParentForm from '@/views/modules/component/ParentForm';
+import ParentForm from '@/views/Modules/component/ParentForm';
 import ModulesType from '@/type/modules';
 import ModulesServices from '@/api/modules';
 

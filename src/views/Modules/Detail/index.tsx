@@ -9,7 +9,7 @@ import classnames, {
   space,
 } from '~/tailwindcss-classnames';
 import { AntdTable, TablePropsType } from '@/component/Common/CTable/ATable';
-import SonForm from '@/views/modules/component/SonForm';
+import SonForm from '@/views/Modules/component/SonForm';
 import ModulesServices from '@/api/modules';
 import ModulesType from '@/type/modules';
 

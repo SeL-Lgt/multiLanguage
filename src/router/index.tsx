@@ -2,9 +2,9 @@ import React, { ReactNode } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from '@/views/Home';
 import CNotFound from '@/component/Common/CNotFound';
-import Modules from '@/views/modules';
-import ModulesList from '@/views/modules/List';
-import ModulesDetail from '@/views/modules/Detail';
+import Modules from '@/views/Modules';
+import ModulesList from '@/views/Modules/List';
+import ModulesDetail from '@/views/Modules/Detail';
 import LanguageIndexManagement from '@/views/Mark';
 import CopyWritingManagement from '@/views/CopyWriting';
 
@@ -42,7 +42,7 @@ export const routerList: Array<RouterType> = [
     element: <LanguageIndexManagement />,
   },
   {
-    path: '/modules',
+    path: '/Modules',
     meta: {
       title: '项目模块管理',
     },
