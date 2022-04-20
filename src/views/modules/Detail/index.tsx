@@ -9,11 +9,11 @@ import classnames, {
   space,
 } from '~/tailwindcss-classnames';
 import { AntdTable, TablePropsType } from '@/component/Common/CTable/ATable';
-import SonForm from '@/views/ProjectManagement/component/SonForm';
+import SonForm from '@/views/modules/component/SonForm';
 import ModulesServices from '@/api/modules';
 import ModulesType from '@/type/modules';
 
-function ProjectManagementDetail() {
+function ModulesDetail() {
   const params = useParams();
   const navigate = useNavigate();
   const [tableData, setTableData] = useState<TablePropsType>({
@@ -63,7 +63,7 @@ function ProjectManagementDetail() {
    * 返回上一页
    */
   const back = () => {
-    navigate('/projectManagement');
+    navigate(-1);
   };
 
   /**
@@ -124,4 +124,4 @@ function ProjectManagementDetail() {
   );
 }
 
-export default ProjectManagementDetail;
+export default ModulesDetail;

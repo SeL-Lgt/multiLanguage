@@ -10,7 +10,7 @@ import classnames, {
 import { Button, Input, Select } from 'antd';
 import { AntdTable, TablePropsType } from '@/component/Common/CTable/ATable';
 import { useNavigate } from 'react-router-dom';
-import ParentForm from '@/views/ProjectManagement/component/ParentForm';
+import ParentForm from '@/views/modules/component/ParentForm';
 import ModulesType from '@/type/modules';
 import ModulesServices from '@/api/modules';
 
@@ -19,7 +19,7 @@ type ClickItemType = {
   type?: ModulesType.FormType;
 };
 
-function ProjectManagement() {
+function Modules() {
   const navigate = useNavigate();
   const [tableData, setTableData] = useState<TablePropsType>({
     data: {
@@ -98,7 +98,7 @@ function ProjectManagement() {
    * @param {object<ModulesType.ModulesItem>} item
    */
   const checkDetails = (item: ModulesType.ModulesItem) => {
-    navigate(`/projectManagement/detail/${item.modulesKey}`);
+    navigate(`/modules/detail/${item.modulesKey}`);
   };
 
   /**
@@ -207,4 +207,4 @@ function ProjectManagement() {
   );
 }
 
-export default ProjectManagement;
+export default Modules;

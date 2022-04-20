@@ -2,11 +2,11 @@ import React, { ReactNode } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from '@/views/Home';
 import CNotFound from '@/component/Common/CNotFound';
-import ProjectManagement from '@/views/ProjectManagement';
-import ProjectManagementList from '@/views/ProjectManagement/List';
-import ProjectManagementDetail from '@/views/ProjectManagement/Detail';
+import Modules from '@/views/modules';
+import ModulesList from '@/views/modules/List';
+import ModulesDetail from '@/views/modules/Detail';
 import LanguageIndexManagement from '@/views/Mark';
-import CopyWritingManagement from '@/views/CopyWritingManagement';
+import CopyWritingManagement from '@/views/CopyWriting';
 
 export type RouterType = {
   path: string;
@@ -42,11 +42,11 @@ export const routerList: Array<RouterType> = [
     element: <LanguageIndexManagement />,
   },
   {
-    path: '/projectManagement',
+    path: '/modules',
     meta: {
       title: '项目模块管理',
     },
-    element: <ProjectManagement />,
+    element: <Modules />,
     children: [
       {
         path: '',
@@ -55,7 +55,7 @@ export const routerList: Array<RouterType> = [
           title: '项目模块管理',
           noShowMenu: true,
         },
-        element: <ProjectManagementList />,
+        element: <ModulesList />,
       },
       {
         path: 'detail/:id',
@@ -63,7 +63,7 @@ export const routerList: Array<RouterType> = [
           title: '模块详情',
           noShowMenu: true,
         },
-        element: <ProjectManagementDetail />,
+        element: <ModulesDetail />,
       },
     ],
   },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-function ProjectManagement() {
+function Modules() {
   return <Outlet />;
 }
-export default ProjectManagement;
+export default Modules;
