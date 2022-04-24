@@ -86,6 +86,20 @@ class ModulesServices {
     });
     return res as Result<any>;
   };
+
+  /**
+   * 查询子模块列表
+   * @param params
+   */
+  static querySubModulesNameList = async (
+    params: ModulesType.SubModulesItem,
+  ) => {
+    const res = await request.get({
+      url: SubModulesApi.querySubModulesNameList,
+      params,
+    });
+    return res as Result<Array<ModulesType.SubModulesItem>>;
+  };
 }
 
 export default ModulesServices;

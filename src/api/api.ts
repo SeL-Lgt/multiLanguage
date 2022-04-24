@@ -22,4 +22,10 @@ export class SubModulesApi {
   static querySubModulesList = '/subModule/querySubModulesList';
 
   static deleteSubModules = '/subModule/deleteSubModules';
+
+  static querySubModulesNameList = '/subModule/querySubModulesNameList';
+}
+
+export class CopyWritingApi {
+  static addCopyWriting = '/copyWriting/addCopyWriting';
 }
