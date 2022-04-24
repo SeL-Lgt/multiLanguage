@@ -7,7 +7,7 @@ import classnames, {
   textAlign,
   width,
 } from '~/tailwindcss-classnames';
-import { AntdTable } from '@/component/Common/CTable/ATable';
+import { AntdTable, TablePropsType } from '@/component/Common/CTable/ATable';
 import CopyWritingForm from '@/views/CopyWriting/component/form';
 import ModulesServices from '@/api/modules';
 import ModulesType from '@/type/modules';
@@ -15,9 +15,47 @@ import CopyWriting from '@/type/copyWriting';
 import './index.less';
 import MarkServices from '@/api/mark';
 import MarkType from '@/type/mark';
+import CopyWritingServices from '@/api/copyWriting';
 
 function CopyWritingManagement() {
   const [form] = Form.useForm();
+  const [tableData, setTableData] = useState<TablePropsType>({
+    data: {
+      columns: [
+        {
+          title: '父模块',
+          dataIndex: 'modulesKey',
+          key: 'modulesKey',
+          align: 'center',
+        },
+        {
+          title: '子模块',
+          dataIndex: 'subModulesKey',
+          key: 'subModulesKey',
+          align: 'center',
+        },
+        {
+          title: '文案标识key',
+          dataIndex: 'copyKey',
+          key: 'copyKey',
+          align: 'center',
+        },
+        {
+          title: '语言类型',
+          dataIndex: 'langKey',
+          key: 'langKey',
+          align: 'center',
+        },
+        {
+          title: '文案',
+          dataIndex: 'langText',
+          key: 'langText',
+          align: 'center',
+        },
+      ],
+      dataSource: [],
+    },
+  });
   const [modulesNameList, setModulesNameList] =
     useState<Array<ModulesType.queryModules>>();
   const [subModulesNameList, setSubModulesNameList] =
@@ -25,7 +63,8 @@ function CopyWritingManagement() {
   const [markList, setMarkList] = useState<Array<MarkType.MarkItem>>();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [formType, setFormType] = useState<ModulesType.FormType>('Edit');
-  const [formData, setFormData] = useState<CopyWriting.MarkFormDataType>();
+  const [formData, setFormData] =
+    useState<CopyWriting.CopyWritingFormDataType>();
 
   useEffect(() => {
     queryModulesNameList();
@@ -39,6 +78,9 @@ function CopyWritingManagement() {
     ModulesServices.queryModulesNameList().then((res) => {
       setModulesNameList(res.data);
       modulesNameChange(res.data[0].modulesKey as string);
+      getCopyWritingList({
+        modulesKey: res.data[0].modulesKey as string,
+      });
     });
   };
 
@@ -134,7 +176,15 @@ function CopyWritingManagement() {
    * 条件查询列表
    */
   const onSearch = () => {
-    console.log(form.getFieldsValue());
+    getCopyWritingList(form.getFieldsValue());
+  };
+
+  const getCopyWritingList = (params: CopyWriting.QueryCopyWriting) => {
+    const { ...temp } = tableData;
+    CopyWritingServices.queryCopyWriting(params).then((res) => {
+      temp.data.dataSource = res?.data;
+      setTableData(temp);
+    });
   };
 
   /**
@@ -191,9 +241,12 @@ function CopyWritingManagement() {
             {subModulesNameSelectView()}
           </Select>
         </Form.Item>
+        <Form.Item label='文案标识key' name='copyKey'>
+          <Input />
+        </Form.Item>
         <Form.Item
           label='语言类型'
-          name='languageType'
+          name='langKey'
           className={classnames(width('w-1/5'))}
         >
           <Select
@@ -205,10 +258,7 @@ function CopyWritingManagement() {
             {markSelectView()}
           </Select>
         </Form.Item>
-        <Form.Item label='Key值' name='key'>
-          <Input />
-        </Form.Item>
-        <Form.Item label='查询文案' name='text'>
+        <Form.Item label='查询文案' name='langText'>
           <Input />
         </Form.Item>
       </Form>
@@ -232,7 +282,7 @@ function CopyWritingManagement() {
           <Button>导出文案</Button>
         </div>
       </div>
-      <AntdTable />
+      <AntdTable data={tableData.data} />
       <CopyWritingForm
         key={showModal.toString()}
         visible={showModal}

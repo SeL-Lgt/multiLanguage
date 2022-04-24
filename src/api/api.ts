@@ -28,4 +28,6 @@ export class SubModulesApi {
 
 export class CopyWritingApi {
   static addCopyWriting = '/copyWriting/addCopyWriting';
+
+  static queryCopyWriting = '/copyWriting/queryCopyWriting';
 }

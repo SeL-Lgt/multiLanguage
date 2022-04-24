@@ -11,6 +11,7 @@ import MarkType from '@/type/mark';
 import MarkServices from '@/api/mark';
 import ModulesServices from '@/api/modules';
 import ModulesType from '@/type/modules';
+import CopyWritingServices from '@/api/copyWriting';
 
 type PropsType = {
   type: CopyWriting.FormType;
@@ -56,7 +57,9 @@ function CopyWritingForm(props: PropsType) {
     form
       .validateFields()
       .then((res) => {
-        console.log(res);
+        CopyWritingServices.addCopyWriting(res).then(() => {
+          closeModal();
+        });
       })
       .catch((error) => {
         console.log(error);

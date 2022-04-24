@@ -4,7 +4,7 @@ declare namespace CopyWriting {
     langKey: string | null;
     langText: string | null;
   }
-  interface MarkFormDataType {
+  interface CopyWritingFormDataType {
     modulesKey: string;
     subModulesKey: string;
     copyKey: string | null;
@@ -12,7 +12,14 @@ declare namespace CopyWriting {
   }
   interface ClickItemType {
     type?: FormType;
-    item?: MarkFormDataType;
+    item?: CopyWritingFormDataType;
+  }
+  interface QueryCopyWriting {
+    modulesKey: string;
+    subModulesKey?: string;
+    copyKey?: string;
+    langKey?: string;
+    langText?: string;
   }
 }
 export default CopyWriting;
