@@ -229,6 +229,7 @@ function CopyWritingManagement() {
    * 关闭对话框
    */
   const closeModal = () => {
+    getCopyWritingList(form.getFieldsValue());
     setShowModal(false);
   };
 
