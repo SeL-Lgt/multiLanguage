@@ -65,15 +65,7 @@ function Modules() {
           ),
         },
       ],
-      dataSource: [
-        {
-          modulesKey: 'DMS-PC',
-          modulesName: '1123',
-          number: '1123',
-          language: '1123',
-          remark: '1123',
-        },
-      ],
+      dataSource: [],
     },
   });
   // 传给表单子组件的数据
