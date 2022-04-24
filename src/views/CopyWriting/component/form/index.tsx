@@ -196,7 +196,11 @@ function CopyWritingForm(props: PropsType) {
               },
             ]}
           >
-            <Select showSearch onChange={subModulesNameChange}>
+            <Select
+              disabled={type === 'Edit'}
+              showSearch
+              onChange={subModulesNameChange}
+            >
               {subModulesNameSelectView()}
             </Select>
           </Form.Item>
@@ -212,7 +216,7 @@ function CopyWritingForm(props: PropsType) {
             extra={devKey && `开发所用Key值：${devKey}`}
           >
             <Input
-              disabled={!form.getFieldsValue().subModulesKey}
+              disabled={!form.getFieldsValue().subModulesKey || type === 'Edit'}
               onChange={langKeyChange}
             />
           </Form.Item>

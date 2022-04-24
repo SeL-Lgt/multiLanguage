@@ -30,4 +30,6 @@ export class CopyWritingApi {
   static addCopyWriting = '/copyWriting/addCopyWriting';
 
   static queryCopyWriting = '/copyWriting/queryCopyWriting';
+
+  static queryCopyWritingByCopyKey = '/copyWriting/queryCopyWritingByCopyKey';
 }

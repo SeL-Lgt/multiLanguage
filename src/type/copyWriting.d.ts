@@ -20,6 +20,7 @@ declare namespace CopyWriting {
     copyKey?: string;
     langKey?: string;
     langText?: string;
+    langList?: Array<LangItemType>;
   }
 }
 export default CopyWriting;

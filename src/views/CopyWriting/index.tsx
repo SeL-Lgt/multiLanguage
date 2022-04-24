@@ -52,6 +52,22 @@ function CopyWritingManagement() {
           key: 'langText',
           align: 'center',
         },
+        {
+          title: '操作',
+          dataIndex: 'operating',
+          key: 'operating',
+          align: 'center',
+          render: (text: string, item: CopyWriting.QueryCopyWriting) => (
+            <Button
+              type='link'
+              onClick={() => {
+                editEvent(item);
+              }}
+            >
+              编辑
+            </Button>
+          ),
+        },
       ],
       dataSource: [],
     },
@@ -214,6 +230,17 @@ function CopyWritingManagement() {
    */
   const closeModal = () => {
     setShowModal(false);
+  };
+
+  const editEvent = (item: CopyWriting.QueryCopyWriting) => {
+    const { modulesKey, subModulesKey, copyKey } = item;
+    CopyWritingServices.queryCopyWritingByCopyKey({
+      modulesKey,
+      subModulesKey,
+      copyKey,
+    }).then((res) => {
+      clickFormEvent({ item: res.data, type: 'Edit' });
+    });
   };
 
   return (
