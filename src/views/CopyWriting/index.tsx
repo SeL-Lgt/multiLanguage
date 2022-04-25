@@ -58,14 +58,24 @@ function CopyWritingManagement() {
           key: 'operating',
           align: 'center',
           render: (text: string, item: CopyWriting.QueryCopyWriting) => (
-            <Button
-              type='link'
-              onClick={() => {
-                editEvent(item);
-              }}
-            >
-              编辑
-            </Button>
+            <div>
+              <Button
+                type='link'
+                onClick={() => {
+                  editEvent(item);
+                }}
+              >
+                编辑
+              </Button>
+              <Button
+                type='link'
+                onClick={() => {
+                  deleteEvent(item as CopyWriting.DeleteCopyWriting);
+                }}
+              >
+                删除
+              </Button>
+            </div>
           ),
         },
       ],
@@ -241,6 +251,16 @@ function CopyWritingManagement() {
       copyKey,
     }).then((res) => {
       clickFormEvent({ item: res.data, type: 'Edit' });
+    });
+  };
+
+  /**
+   * 删除指定文案
+   * @param item
+   */
+  const deleteEvent = (item: CopyWriting.DeleteCopyWriting) => {
+    CopyWritingServices.deleteCopyWriting(item).then((res) => {
+      getCopyWritingList(form.getFieldsValue());
     });
   };
 

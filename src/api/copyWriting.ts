@@ -41,6 +41,18 @@ class CopyWritingServices {
     });
     return res as Result<CopyWriting.CopyWritingFormDataType>;
   };
+
+  /**
+   * 删除指定文案
+   * @param params
+   */
+  static deleteCopyWriting = async (data: CopyWriting.DeleteCopyWriting) => {
+    const res = await request.delete({
+      url: CopyWritingApi.deleteCopyWriting,
+      data,
+    });
+    return res as Result<any>;
+  };
 }
 
 export default CopyWritingServices;

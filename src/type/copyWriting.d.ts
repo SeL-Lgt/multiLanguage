@@ -22,5 +22,12 @@ declare namespace CopyWriting {
     langText?: string;
     langList?: Array<LangItemType>;
   }
+  interface DeleteCopyWriting {
+    modulesKey: string;
+    subModulesKey: string;
+    copyKey: string;
+    langKey: string;
+    langText: string;
+  }
 }
 export default CopyWriting;
