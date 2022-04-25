@@ -34,7 +34,7 @@ class ModulesServices {
    * @param data
    */
   static updateModules = async (data: ModulesType.ModulesItem) => {
-    const res = await request.post({
+    const res = await request.put({
       url: ModulesApi.updateModules,
       data,
     });
