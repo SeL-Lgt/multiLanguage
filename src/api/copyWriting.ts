@@ -53,6 +53,20 @@ class CopyWritingServices {
     });
     return res as Result<any>;
   };
+
+  /**
+   * 更新文案
+   * @param data
+   */
+  static updateCopyWriting = async (
+    data: CopyWriting.CopyWritingFormDataType,
+  ) => {
+    const res = await request.put({
+      url: CopyWritingApi.updateCopyWriting,
+      data,
+    });
+    return res as Result<any>;
+  };
 }
 
 export default CopyWritingServices;

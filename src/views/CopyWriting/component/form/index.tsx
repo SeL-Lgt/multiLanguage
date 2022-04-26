@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CopyWriting from '@/type/copyWriting';
-import { Button, Form, Input, Modal, Select, Space } from 'antd';
+import { Button, Form, Input, message, Modal, Select } from 'antd';
 import classnames, {
   justifyContent,
   maxHeight,
@@ -56,10 +56,28 @@ function CopyWritingForm(props: PropsType) {
   const okModal = () => {
     form
       .validateFields()
-      .then((res) => {
-        CopyWritingServices.addCopyWriting(res).then(() => {
-          closeModal();
-        });
+      .then((value) => {
+        switch (type) {
+          case 'Edit':
+            CopyWritingServices.updateCopyWriting(value).then((res) => {
+              if (res.status === 200) {
+                message.success(res.message, 2);
+                closeModal();
+              } else {
+                message.error(res.message, 2);
+              }
+            });
+            break;
+          default:
+            CopyWritingServices.addCopyWriting(value).then((res) => {
+              if (res.status === 200) {
+                message.success(res.message, 2);
+                closeModal();
+              } else {
+                message.error(res.message, 2);
+              }
+            });
+        }
       })
       .catch((error) => {
         console.log(error);

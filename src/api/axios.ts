@@ -33,7 +33,10 @@ class Axios {
     // 全局响应拦截器保证最后执行
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => res.data,
-      (err: any) => err.response.data.message,
+      (err: any) => {
+        console.log(err.response.data.message);
+        return err.response.data;
+      },
     );
   }
 

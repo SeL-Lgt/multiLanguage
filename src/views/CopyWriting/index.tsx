@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Form, Input, message, Select } from 'antd';
 import classnames, {
   display,
   justifyContent,
@@ -39,6 +39,20 @@ function CopyWritingManagement() {
           dataIndex: 'copyKey',
           key: 'copyKey',
           align: 'center',
+        },
+        {
+          title: '开发所使用的key',
+          dataIndex: 'devKey',
+          key: 'devKey',
+          align: 'center',
+          render: (text: string, item: CopyWriting.QueryCopyWriting) => (
+            <Button
+              type='link'
+              onClick={() =>
+                copyDevKey(`${item.subModulesKey}.${item.copyKey}`)
+              }
+            >{`${item.subModulesKey}.${item.copyKey}`}</Button>
+          ),
         },
         {
           title: '语言类型',
@@ -261,6 +275,12 @@ function CopyWritingManagement() {
   const deleteEvent = (item: CopyWriting.DeleteCopyWriting) => {
     CopyWritingServices.deleteCopyWriting(item).then((res) => {
       getCopyWritingList(form.getFieldsValue());
+    });
+  };
+
+  const copyDevKey = (value: string) => {
+    navigator.clipboard.writeText(value).then(() => {
+      message.success(`已复制文案${value}`);
     });
   };
 
