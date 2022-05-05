@@ -6,7 +6,7 @@ class Request {
 
   constructor() {
     this.request = new Axios({
-      baseURL: `http://localhost:3000/api`,
+      baseURL: `${process.env.BASE_URL}/api`,
       timeout: 1000 * 60 * 5,
     });
   }
