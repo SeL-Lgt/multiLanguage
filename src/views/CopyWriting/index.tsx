@@ -17,6 +17,7 @@ import MarkServices from '@/api/mark';
 import MarkType from '@/type/mark';
 import CopyWritingServices from '@/api/copyWriting';
 import type { RcFile, UploadRequestOption } from 'rc-upload/lib/interface';
+import TimeUtil from '@/utils/timeUtil';
 
 function CopyWritingManagement() {
   const [form] = Form.useForm();
@@ -265,7 +266,10 @@ function CopyWritingManagement() {
       subModulesKey,
       copyKey,
     }).then((res) => {
-      clickFormEvent({ item: res.data, type: 'Edit' });
+      clickFormEvent({
+        item: res.data,
+        type: 'Edit',
+      });
     });
   };
 
@@ -289,17 +293,67 @@ function CopyWritingManagement() {
     });
   };
 
+  /**
+   * 校验是否为excel
+   * @param file
+   */
   const checkExcel = (file: RcFile) => {
     const pattern = /(\.xls|\.xlsx)$/;
     return pattern.test(file.name);
   };
 
+  /**
+   * 上传文案
+   * @param file
+   */
   const uploadCopy = (file: UploadRequestOption) => {
+    const { modulesKey } = form.getFieldsValue();
     const temp = new FormData();
     temp.append('file', file.file);
-    temp.append('modulesKey', form.getFieldsValue().modulesKey);
-    CopyWritingServices.uploadCopy(temp).then((res) => {
-      getCopyWritingList(form.getFieldsValue());
+    temp.append('modulesKey', modulesKey);
+    CopyWritingServices.uploadCopyWriting(temp).then((res) => {
+      switch (res.status) {
+        case 200:
+          getCopyWritingList(form.getFieldsValue());
+          message.success(res.message, 2);
+          if (res.data.errorList.length > 0) {
+            downloadCopy({
+              modulesKey,
+              type: 'error',
+              data: res.data.errorList,
+            } as CopyWriting.DownLoadWriting<any>);
+          }
+          break;
+        default:
+          message.error(res.message, 2);
+      }
+    });
+  };
+
+  /**
+   * 下载文案
+   * @param item
+   */
+  const downloadCopy = (item: CopyWriting.DownLoadWriting<any>) => {
+    const { modulesKey, type } = item;
+    CopyWritingServices.downloadCopyWriting(item).then((res) => {
+      if (res?.status === 500) {
+        message.error(res.message, 2);
+      } else {
+        const blob = new Blob([res as unknown as Blob], {
+          type: 'application/vnd.ms-excel',
+        });
+        const objectUrl = URL.createObjectURL(blob);
+        const fileName = `${
+          type === 'error' ? '错误文案-' : ''
+        }${modulesKey}-${TimeUtil.timeFormat({
+          format: 'YYYY-MM-DD HH:mm:ss',
+        })}.xlsx`;
+        const a = document.createElement('a');
+        a.setAttribute('href', objectUrl);
+        a.setAttribute('download', fileName);
+        a.click();
+      }
     });
   };
 
@@ -372,7 +426,16 @@ function CopyWritingManagement() {
           >
             <Button type='primary'>导入文案</Button>
           </Upload>
-          <Button>导出文案</Button>
+          <Button
+            onClick={() =>
+              downloadCopy({
+                modulesKey: form.getFieldsValue().modulesKey,
+                type: 'inquiry',
+              })
+            }
+          >
+            导出文案
+          </Button>
         </div>
       </div>
       <AntdTable data={tableData.data} />

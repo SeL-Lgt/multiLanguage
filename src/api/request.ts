@@ -50,6 +50,17 @@ class Request {
       headers,
     });
   }
+
+  postBlob(config: RequestType.PostType) {
+    const { url, data, headers } = config;
+    return this.request.request({
+      method: 'POST',
+      responseType: 'blob',
+      url,
+      data,
+      headers,
+    });
+  }
 }
 const request = new Request();
 export default request;

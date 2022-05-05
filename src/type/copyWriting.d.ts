@@ -29,5 +29,10 @@ declare namespace CopyWriting {
     langKey: string;
     langText: string;
   }
+  interface DownLoadWriting<T> {
+    modulesKey: string;
+    type: 'inquiry' | 'error';
+    data?: Array<T>;
+  }
 }
 export default CopyWriting;

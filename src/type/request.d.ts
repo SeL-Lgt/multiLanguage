@@ -2,6 +2,7 @@ import type {
   AxiosRequestConfig,
   AxiosRequestHeaders,
   AxiosResponse,
+  ResponseType,
 } from 'axios';
 
 declare namespace RequestType {
@@ -25,6 +26,7 @@ declare namespace RequestType {
       responseInterceptors: () => unknown;
     };
     headers?: AxiosRequestHeaders;
+    responseType?: ResponseType;
   }
 
   interface GetType extends RequestDataType {
@@ -34,9 +36,11 @@ declare namespace RequestType {
   interface PostType extends RequestDataType {
     data?: unknown;
   }
+
   interface PutType extends RequestDataType {
     data?: unknown;
   }
+
   interface DeleteType extends RequestDataType {
     data?: unknown;
   }

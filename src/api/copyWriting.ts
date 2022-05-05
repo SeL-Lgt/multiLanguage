@@ -72,12 +72,26 @@ class CopyWritingServices {
    * 上传文案
    * @param data
    */
-  static uploadCopy = async (data: unknown) => {
+  static uploadCopyWriting = async (data: FormData) => {
     const res = await request.post({
-      url: CopyWritingApi.uploadCopy,
+      url: CopyWritingApi.uploadCopyWriting,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
+      data,
+    });
+    return res as Result<any>;
+  };
+
+  /**
+   * 下载文案
+   * @param data
+   */
+  static downloadCopyWriting = async <T>(
+    data: CopyWriting.DownLoadWriting<T>,
+  ) => {
+    const res = await request.postBlob({
+      url: CopyWritingApi.downloadCopyWriting,
       data,
     });
     return res as Result<any>;

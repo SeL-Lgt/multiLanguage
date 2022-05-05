@@ -37,5 +37,7 @@ export class CopyWritingApi {
 
   static updateCopyWriting = '/copyWriting/updateCopyWriting';
 
-  static uploadCopy = '/copyWriting/uploadCopy';
+  static uploadCopyWriting = '/copyWriting/uploadCopyWriting';
+
+  static downloadCopyWriting = '/copyWriting/downloadCopyWriting';
 }
