@@ -67,6 +67,21 @@ class CopyWritingServices {
     });
     return res as Result<any>;
   };
+
+  /**
+   * 上传文案
+   * @param data
+   */
+  static uploadCopy = async (data: unknown) => {
+    const res = await request.post({
+      url: CopyWritingApi.uploadCopy,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data,
+    });
+    return res as Result<any>;
+  };
 }
 
 export default CopyWritingServices;

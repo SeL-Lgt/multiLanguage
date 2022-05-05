@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, message, Select } from 'antd';
+import { Button, Form, Input, message, Select, Upload } from 'antd';
 import classnames, {
   display,
   justifyContent,
@@ -16,6 +16,7 @@ import './index.less';
 import MarkServices from '@/api/mark';
 import MarkType from '@/type/mark';
 import CopyWritingServices from '@/api/copyWriting';
+import type { RcFile, UploadRequestOption } from 'rc-upload/lib/interface';
 
 function CopyWritingManagement() {
   const [form] = Form.useForm();
@@ -278,9 +279,27 @@ function CopyWritingManagement() {
     });
   };
 
+  /**
+   * 复制开发Key文案
+   * @param value
+   */
   const copyDevKey = (value: string) => {
     navigator.clipboard.writeText(value).then(() => {
       message.success(`已复制文案${value}`);
+    });
+  };
+
+  const checkExcel = (file: RcFile) => {
+    const pattern = /(\.xls|\.xlsx)$/;
+    return pattern.test(file.name);
+  };
+
+  const uploadCopy = (file: UploadRequestOption) => {
+    const temp = new FormData();
+    temp.append('file', file.file);
+    temp.append('modulesKey', form.getFieldsValue().modulesKey);
+    CopyWritingServices.uploadCopy(temp).then((res) => {
+      getCopyWritingList(form.getFieldsValue());
     });
   };
 
@@ -346,7 +365,13 @@ function CopyWritingManagement() {
           新增语言信息
         </Button>
         <div className={classnames(display('flex'), space('space-x-5'))}>
-          <Button type='primary'>导入文案</Button>
+          <Upload
+            showUploadList={false}
+            beforeUpload={checkExcel}
+            customRequest={uploadCopy}
+          >
+            <Button type='primary'>导入文案</Button>
+          </Upload>
           <Button>导出文案</Button>
         </div>
       </div>

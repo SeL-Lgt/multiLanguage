@@ -36,4 +36,6 @@ export class CopyWritingApi {
   static deleteCopyWriting = '/copyWriting/deleteCopyWriting';
 
   static updateCopyWriting = '/copyWriting/updateCopyWriting';
+
+  static uploadCopy = '/copyWriting/uploadCopy';
 }

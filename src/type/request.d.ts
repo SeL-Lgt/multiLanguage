@@ -1,4 +1,8 @@
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import type {
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  AxiosResponse,
+} from 'axios';
 
 declare namespace RequestType {
   interface RequestInterceptors {
@@ -20,6 +24,7 @@ declare namespace RequestType {
       requestInterceptors: () => unknown;
       responseInterceptors: () => unknown;
     };
+    headers?: AxiosRequestHeaders;
   }
 
   interface GetType extends RequestDataType {

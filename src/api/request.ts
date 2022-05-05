@@ -12,38 +12,42 @@ class Request {
   }
 
   get(config: RequestType.GetType) {
-    const { url, params } = config;
+    const { url, params, headers } = config;
     return this.request.request({
       method: 'GET',
       url,
       params,
+      headers,
     });
   }
 
   post(config: RequestType.PostType) {
-    const { url, data } = config;
+    const { url, data, headers } = config;
     return this.request.request({
       method: 'POST',
       url,
       data,
+      headers,
     });
   }
 
   put(config: RequestType.PutType) {
-    const { url, data } = config;
+    const { url, data, headers } = config;
     return this.request.request({
       method: 'PUT',
       url,
       data,
+      headers,
     });
   }
 
   delete(config: RequestType.DeleteType) {
-    const { url, data } = config;
+    const { url, data, headers } = config;
     return this.request.request({
       method: 'DELETE',
       url,
       data,
+      headers,
     });
   }
 }
