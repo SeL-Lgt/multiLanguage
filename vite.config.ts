@@ -7,7 +7,6 @@ import * as dotenv from 'dotenv';
 dotenv.config({
   path: path.resolve('envs', `.env.${process.env.NODE_ENV}`),
 });
-
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
@@ -42,7 +41,15 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
-  server: { port: 8080 },
+  server: {
+    port: 8080,
+    proxy: {
+      [process.env.BASE_URL]: {
+        target: process.env.BASE_URL,
+        changeOrigin: true,
+      },
+    },
+  },
   build: {
     rollupOptions: {
       output: {
