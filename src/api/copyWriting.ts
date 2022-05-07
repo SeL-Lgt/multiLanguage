@@ -96,6 +96,17 @@ class CopyWritingServices {
     });
     return res as Result<any>;
   };
+
+  /**
+   * 下载导入文案模板
+   * @param data
+   */
+  static downloadDefaultCopyExcel = async () => {
+    const res = await request.postBlob({
+      url: CopyWritingApi.downloadDefaultCopyExcel,
+    });
+    return res as Result<any>;
+  };
 }
 
 export default CopyWritingServices;

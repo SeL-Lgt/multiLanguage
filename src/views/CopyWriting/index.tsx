@@ -376,6 +376,27 @@ function CopyWritingManagement() {
     });
   };
 
+  /**
+   * 下载导入文案模板
+   */
+  const downloadDefaultCopyExcel = () => {
+    CopyWritingServices.downloadDefaultCopyExcel().then((res) => {
+      if (res?.status === 500) {
+        message.error(res.message, 2);
+      } else {
+        const blob = new Blob([res as unknown as Blob], {
+          type: 'application/vnd.ms-excel',
+        });
+        const objectUrl = URL.createObjectURL(blob);
+        const fileName = '导入文案模板.xlsx';
+        const a = document.createElement('a');
+        a.setAttribute('href', objectUrl);
+        a.setAttribute('download', fileName);
+        a.click();
+      }
+    });
+  };
+
   return (
     <div className={classnames('copy-writing', space('space-y-5'))}>
       <Form
@@ -438,13 +459,18 @@ function CopyWritingManagement() {
           新增语言信息
         </Button>
         <div className={classnames(display('flex'), space('space-x-5'))}>
-          <Upload
-            showUploadList={false}
-            beforeUpload={checkExcel}
-            customRequest={uploadCopy}
-          >
-            <Button type='primary'>导入文案</Button>
-          </Upload>
+          <div>
+            <Button type='link' onClick={downloadDefaultCopyExcel}>
+              导入文案模板
+            </Button>
+            <Upload
+              showUploadList={false}
+              beforeUpload={checkExcel}
+              customRequest={uploadCopy}
+            >
+              <Button type='primary'>导入文案</Button>
+            </Upload>
+          </div>
           <Button
             onClick={() =>
               downloadCopy({
