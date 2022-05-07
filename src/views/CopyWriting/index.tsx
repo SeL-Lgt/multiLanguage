@@ -288,9 +288,28 @@ function CopyWritingManagement() {
    * @param value
    */
   const copyDevKey = (value: string) => {
-    navigator.clipboard.writeText(value).then(() => {
+    // navigator clipboard 需要https等安全上下文
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(value).then(() => {
+        message.success(`已复制文案${value}`);
+      });
+    } else {
+      // 创建text area
+      const textArea = document.createElement('textarea');
+      textArea.value = value;
+      // 使text area不在viewport，同时设置不可见
+      textArea.style.position = 'absolute';
+      textArea.style.opacity = '0';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      // 执行复制命令并移除文本框
+      document.execCommand('copy');
       message.success(`已复制文案${value}`);
-    });
+      textArea.remove();
+    }
   };
 
   /**
