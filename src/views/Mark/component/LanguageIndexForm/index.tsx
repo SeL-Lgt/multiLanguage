@@ -24,7 +24,7 @@ function LanguageIndexForm(props: PropsType) {
     MarkServices.queryMarkList({
       isUsed: type === 'Edit',
     }).then((res) => {
-      setLanguageList(res.data);
+      setLanguageList(res.data.row);
     });
     form.setFieldsValue(formData);
   }, []);

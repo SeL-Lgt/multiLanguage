@@ -1,30 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table, Pagination } from 'antd';
-import { TablePaginationConfig } from 'antd/lib/table/interface';
 import { classnames, space, textAlign } from '~/tailwindcss-classnames';
 
-type TableConfig = {
+interface PaginationType {
+  pageSize?: number;
+  current: number;
+  total: number;
+}
+
+interface TableConfig {
   showHeader?: boolean;
-  pagination?: false | TablePaginationConfig;
   scroll?: {
     x?: number | true | string;
     y?: number | string;
   };
   bordered?: boolean;
-};
+}
 
-type TableProp = {
+interface TableProp {
   columns: Array<object>;
   dataSource: Array<object>;
-};
+}
 
 export interface TablePropsType {
   config?: TableConfig;
   data: TableProp;
+  pagination?: PaginationType;
+  pageChange?: (page: number, pageSize: number) => unknown;
 }
 
 export function AntdTable(props: TablePropsType) {
-  const { config, data } = props;
+  const { config, data, pagination, pageChange } = props;
+  const pageChangeEvent = (page: number, pageSize: number) => {
+    if (pageChange) {
+      pageChange(page, pageSize);
+    }
+  };
   return (
     <div className={classnames(space('space-y-5'))}>
       <Table
@@ -36,8 +47,17 @@ export function AntdTable(props: TablePropsType) {
         scroll={config?.scroll}
         bordered={config?.bordered || true}
       />
-      {config?.pagination && (
-        <Pagination className={classnames(textAlign('text-right'))} />
+      {pagination && (
+        <Pagination
+          total={pagination?.total}
+          current={pagination?.current}
+          pageSize={pagination?.pageSize || 10}
+          defaultCurrent={1}
+          defaultPageSize={10}
+          onChange={(page, pageSize) => pageChangeEvent(page, pageSize)}
+          className={classnames(textAlign('text-right'))}
+          showTotal={(total) => `总条数：${total}`}
+        />
       )}
     </div>
   );
@@ -46,7 +66,6 @@ export function AntdTable(props: TablePropsType) {
 AntdTable.defaultProps = {
   config: {
     bordered: true,
-    pagination: {},
     showHeader: true,
     scroll: {},
   },

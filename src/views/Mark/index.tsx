@@ -59,17 +59,31 @@ function LanguageIndexManagement() {
   // 控制表单显示
   const [showModal, setShowModal] = useState<boolean>(false);
 
+  const [pagination, setPagination] = useState({
+    pageSize: 10,
+    current: 1,
+    total: 0,
+  });
+
   useEffect(() => {
     getMarkList();
-  }, []);
+  }, [pagination.current]);
 
   /**
    * 获取列表信息
    */
   const getMarkList = () => {
     const { ...temp } = tableData;
-    MarkServices.queryMarkList({ isUsed: true }).then((res) => {
-      temp.data.dataSource = res?.data;
+    console.log(pagination);
+    const params = { isUsed: true, ...pagination };
+    MarkServices.queryMarkList(params).then((res) => {
+      const { row, current, pageSize, total } = res.data;
+      temp.data.dataSource = row;
+      setPagination({
+        current,
+        pageSize,
+        total,
+      });
       setTableData(temp);
     });
   };
@@ -96,12 +110,29 @@ function LanguageIndexManagement() {
     getMarkList();
   };
 
+  /**
+   * 分页改变
+   * @param page
+   * @param pageSize
+   */
+  const pageChange = (page: number, pageSize: number) => {
+    setPagination({
+      pageSize,
+      current: page,
+      total: pagination.total,
+    });
+  };
+
   return (
     <div className={classnames(space('space-y-5'))}>
       <Button type='primary' onClick={() => clickFormEvent({ type: 'New' })}>
         新增语言
       </Button>
-      <AntdTable data={tableData.data} />
+      <AntdTable
+        data={tableData.data}
+        pagination={pagination}
+        pageChange={pageChange}
+      />
       {showModal && (
         <LanguageIndexForm
           key={showModal.toString()}

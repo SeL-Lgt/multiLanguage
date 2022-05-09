@@ -190,7 +190,7 @@ function CopyWritingManagement() {
     MarkServices.queryMarkList({
       isUsed: true,
     }).then((res) => {
-      setMarkList(res.data);
+      setMarkList(res.data.row);
     });
   };
 

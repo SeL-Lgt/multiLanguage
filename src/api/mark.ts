@@ -1,6 +1,6 @@
 import request from '@/api/request';
 import MarkType from '@/type/mark.d';
-import type { Result } from '@/type/api.d';
+import type { Pagination, Result } from '@/type/api.d';
 import { MarkApi } from '@/api/api';
 
 class MarkServices {
@@ -14,7 +14,7 @@ class MarkServices {
       url: MarkApi.queryMarkList,
       data,
     });
-    return res as Result<Array<MarkType.MarkItem>>;
+    return res as Result<Pagination<Array<MarkType.MarkItem>>>;
   };
 
   static addMark = async (data: MarkType.MarkItem) => {
@@ -33,4 +33,5 @@ class MarkServices {
     return res as Result<any>;
   };
 }
+
 export default MarkServices;
