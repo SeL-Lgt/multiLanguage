@@ -74,7 +74,6 @@ function LanguageIndexManagement() {
    */
   const getMarkList = () => {
     const { ...temp } = tableData;
-    console.log(pagination);
     const params = { isUsed: true, ...pagination };
     MarkServices.queryMarkList(params).then((res) => {
       const { row, current, pageSize, total } = res.data;

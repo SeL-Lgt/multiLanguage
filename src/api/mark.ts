@@ -9,10 +9,10 @@ class MarkServices {
    * @param {Object<MarkType.QueryMarkListType>} data
    * isUsed: true已使用，false未使用，null所有
    */
-  static queryMarkList = async (data: MarkType.QueryMarkListType = {}) => {
-    const res = await request.post({
+  static queryMarkList = async (params: MarkType.QueryMarkListType = {}) => {
+    const res = await request.get({
       url: MarkApi.queryMarkList,
-      data,
+      params,
     });
     return res as Result<Pagination<Array<MarkType.MarkItem>>>;
   };
