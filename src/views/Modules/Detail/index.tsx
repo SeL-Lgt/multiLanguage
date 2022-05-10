@@ -43,18 +43,28 @@ function ModulesDetail() {
   });
   // 控制表单显示
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [pagination, setPagination] = useState({
+    pageSize: 10,
+    current: 1,
+    total: 0,
+  });
   const modulesKey: ModulesType.ModulesKey | undefined = params.id;
 
   useEffect(() => {
     getSubModulesList();
-  }, []);
+  }, [pagination.current]);
 
   const getSubModulesList = () => {
     const { ...temp } = tableData;
-    ModulesServices.querySubModulesList({
-      modulesKey,
-    }).then((res) => {
-      temp.data.dataSource = res.data;
+    const rep = { ...pagination, modulesKey };
+    ModulesServices.querySubModulesList(rep).then((res) => {
+      const { row, current, pageSize, total } = res.data;
+      temp.data.dataSource = row;
+      setPagination({
+        current,
+        pageSize,
+        total,
+      });
       setTableData(temp);
     });
   };
@@ -91,6 +101,19 @@ function ModulesDetail() {
     setShowModal(false);
   };
 
+  /**
+   * 分页改变
+   * @param page
+   * @param pageSize
+   */
+  const pageChange = (page: number, pageSize: number) => {
+    setPagination({
+      pageSize,
+      current: page,
+      total: pagination.total,
+    });
+  };
+
   return (
     <div className={classnames(space('space-y-5'))}>
       <div
@@ -113,7 +136,12 @@ function ModulesDetail() {
       <Button type='primary' onClick={openModal}>
         新增子模块
       </Button>
-      <AntdTable data={tableData.data} config={tableData.config} />
+      <AntdTable
+        data={tableData.data}
+        config={tableData.config}
+        pagination={pagination}
+        pageChange={pageChange}
+      />
       <SonForm
         key={showModal.toString()}
         visible={showModal}

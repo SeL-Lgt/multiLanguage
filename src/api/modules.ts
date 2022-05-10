@@ -74,7 +74,7 @@ class ModulesServices {
       url: SubModulesApi.querySubModulesList,
       params,
     });
-    return res as Result<Array<ModulesType.SubModulesItem>>;
+    return res as Result<PaginationList<Array<ModulesType.SubModulesItem>>>;
   };
 
   /**
