@@ -1,6 +1,6 @@
 import request from '@/api/request';
 import { ModulesApi, SubModulesApi } from '@/api/api';
-import { Result } from '@/type/api';
+import { Pagination, PaginationList, Result } from '@/type/api';
 import ModulesType from '@/type/modules';
 
 class ModulesServices {
@@ -21,12 +21,14 @@ class ModulesServices {
    * 详情信息与模块文案数量
    * @param params
    */
-  static queryModulesList = async (params: ModulesType.queryModules = {}) => {
+  static queryModulesList = async (
+    params: ModulesType.queryModules & Pagination,
+  ) => {
     const res = await request.get({
       url: ModulesApi.queryModulesList,
       params,
     });
-    return res as Result<Array<ModulesType.ModulesItem>>;
+    return res as Result<PaginationList<Array<ModulesType.ModulesItem>>>;
   };
 
   /**

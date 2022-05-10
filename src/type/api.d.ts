@@ -4,9 +4,12 @@ export interface Result<T> {
   status: number;
 }
 
-export interface Pagination<T> {
-  row: T;
+export interface Pagination {
   total: number;
   current: number;
   pageSize: number;
+}
+
+export interface PaginationList<T> extends Pagination {
+  row: T;
 }

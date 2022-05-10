@@ -79,11 +79,17 @@ function Modules() {
   // 控制表单显示
   const [showModal, setShowModal] = useState<boolean>(false);
   const [nameList, setNameList] = useState<Array<ModulesType.queryModules>>();
+  const [pagination, setPagination] = useState({
+    pageSize: 10,
+    current: 1,
+    total: 0,
+  });
+  const [queryModulesName, setQueryModulesName] = useState<string>();
 
   useEffect(() => {
     queryModulesNameList();
     queryModulesList();
-  }, []);
+  }, [pagination.current]);
 
   /**
    * 访问详情
@@ -123,10 +129,17 @@ function Modules() {
   /**
    * 查询列表详情
    */
-  const queryModulesList = (params: ModulesType.queryModules = {}) => {
+  const queryModulesList = () => {
     const { ...temp } = tableData;
+    const params = { ...pagination, modulesKey: queryModulesName };
     ModulesServices.queryModulesList(params).then((res) => {
-      temp.data.dataSource = res.data;
+      const { row, current, pageSize, total } = res.data;
+      temp.data.dataSource = row;
+      setPagination({
+        current,
+        pageSize,
+        total,
+      });
       setTableData(temp);
     });
   };
@@ -152,8 +165,28 @@ function Modules() {
   };
 
   const modulesNameChange = (value: string) => {
-    queryModulesList({
-      modulesKey: value,
+    setQueryModulesName(value);
+    pageInit();
+  };
+
+  /**
+   * 分页改变
+   * @param page
+   * @param pageSize
+   */
+  const pageChange = (page: number, pageSize: number) => {
+    setPagination({
+      pageSize,
+      current: page,
+      total: pagination.total,
+    });
+  };
+
+  const pageInit = () => {
+    setPagination({
+      pageSize: 10,
+      current: 1,
+      total: 0,
     });
   };
 
@@ -187,7 +220,11 @@ function Modules() {
           新增父模块
         </Button>
       </div>
-      <AntdTable data={tableData.data} />
+      <AntdTable
+        data={tableData.data}
+        pagination={pagination}
+        pageChange={pageChange}
+      />
       <ParentForm
         key={showModal.toString()}
         type={formType}

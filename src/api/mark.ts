@@ -1,20 +1,23 @@
 import request from '@/api/request';
 import MarkType from '@/type/mark.d';
-import type { Pagination, Result } from '@/type/api.d';
+import type { PaginationList, Result } from '@/type/api.d';
 import { MarkApi } from '@/api/api';
+import { Pagination } from '@/type/api.d';
 
 class MarkServices {
   /**
    * 查询语言列表接口
-   * @param {Object<MarkType.QueryMarkListType>} data
    * isUsed: true已使用，false未使用，null所有
+   * @param params
    */
-  static queryMarkList = async (params: MarkType.QueryMarkListType = {}) => {
+  static queryMarkList = async (
+    params: MarkType.QueryMarkListType & Pagination,
+  ) => {
     const res = await request.get({
       url: MarkApi.queryMarkList,
       params,
     });
-    return res as Result<Pagination<Array<MarkType.MarkItem>>>;
+    return res as Result<PaginationList<Array<MarkType.MarkItem>>>;
   };
 
   static addMark = async (data: MarkType.MarkItem) => {
