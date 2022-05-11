@@ -11,7 +11,10 @@ class MarkServices {
    * @param params
    */
   static queryMarkList = async (
-    params: MarkType.QueryMarkListType & Pagination,
+    params:
+      | MarkType.QueryMarkListType
+      | (MarkType.QueryMarkListType & Pagination)
+      | null,
   ) => {
     const res = await request.get({
       url: MarkApi.queryMarkList,

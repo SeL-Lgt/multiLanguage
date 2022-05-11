@@ -22,7 +22,7 @@ class ModulesServices {
    * @param params
    */
   static queryModulesList = async (
-    params: ModulesType.queryModules & Pagination,
+    params: ModulesType.queryModules | (ModulesType.queryModules & Pagination),
   ) => {
     const res = await request.get({
       url: ModulesApi.queryModulesList,
