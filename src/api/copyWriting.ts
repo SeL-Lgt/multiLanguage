@@ -1,6 +1,6 @@
 import request from '@/api/request';
 import { CopyWritingApi } from '@/api/api';
-import { Result } from '@/type/api';
+import { PaginationList, Result } from '@/type/api';
 import CopyWriting from '@/type/copyWriting';
 
 class CopyWritingServices {
@@ -25,7 +25,7 @@ class CopyWritingServices {
       url: CopyWritingApi.queryCopyWriting,
       params,
     });
-    return res as Result<Array<CopyWriting.QueryCopyWriting>>;
+    return res as Result<PaginationList<Array<CopyWriting.QueryCopyWriting>>>;
   };
 
   /**

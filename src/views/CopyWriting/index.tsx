@@ -107,11 +107,37 @@ function CopyWritingManagement() {
   const [formType, setFormType] = useState<ModulesType.FormType>('Edit');
   const [formData, setFormData] =
     useState<CopyWriting.CopyWritingFormDataType>();
+  const [pagination, setPagination] = useState({
+    pageSize: 10,
+    current: 1,
+    total: 0,
+  });
 
+  /**
+   * 初始化加载
+   * 获取父模块列表、允许使用的语言列表
+   */
   useEffect(() => {
     queryModulesNameList();
     queryUsedMarkList();
   }, []);
+
+  /**
+   * 监听父模块选择变更
+   * 父模块数值改变，获取对应子模块
+   */
+  useEffect(() => {
+    const { modulesKey } = form.getFieldsValue();
+    modulesNameChange(modulesKey);
+    pageInit();
+  }, [form.getFieldsValue().modulesKey]);
+
+  /**
+   * 监听页码变更
+   */
+  useEffect(() => {
+    getCopyWritingList();
+  }, [pagination.current]);
 
   /**
    * 查询父模块下拉详情
@@ -119,9 +145,8 @@ function CopyWritingManagement() {
   const queryModulesNameList = () => {
     ModulesServices.queryModulesNameList().then((res) => {
       setModulesNameList(res.data);
-      modulesNameChange(res.data[0].modulesKey as string);
-      getCopyWritingList({
-        modulesKey: res.data[0].modulesKey as string,
+      form.setFieldsValue({
+        modulesKey: res.data[0].modulesKey,
       });
     });
   };
@@ -146,7 +171,6 @@ function CopyWritingManagement() {
   const modulesNameChange = (value: string) => {
     querySubModulesNameList(value);
     form.setFieldsValue({
-      modulesKey: value,
       subModulesKey: null,
     });
   };
@@ -218,13 +242,23 @@ function CopyWritingManagement() {
    * 条件查询列表
    */
   const onSearch = () => {
-    getCopyWritingList(form.getFieldsValue());
+    pageInit();
   };
 
-  const getCopyWritingList = (params: CopyWriting.QueryCopyWriting) => {
+  /**
+   * 获取列表数据
+   */
+  const getCopyWritingList = () => {
     const { ...temp } = tableData;
+    const params = { ...form.getFieldsValue(), ...pagination };
     CopyWritingServices.queryCopyWriting(params).then((res) => {
-      temp.data.dataSource = res?.data;
+      const { row, current, pageSize, total } = res.data;
+      temp.data.dataSource = row;
+      setPagination({
+        current,
+        pageSize,
+        total,
+      });
       setTableData(temp);
     });
   };
@@ -255,10 +289,14 @@ function CopyWritingManagement() {
    * 关闭对话框
    */
   const closeModal = () => {
-    getCopyWritingList(form.getFieldsValue());
+    getCopyWritingList();
     setShowModal(false);
   };
 
+  /**
+   * 修改文案
+   * @param item
+   */
   const editEvent = (item: CopyWriting.QueryCopyWriting) => {
     const { modulesKey, subModulesKey, copyKey } = item;
     CopyWritingServices.queryCopyWritingByCopyKey({
@@ -279,7 +317,7 @@ function CopyWritingManagement() {
    */
   const deleteEvent = (item: CopyWriting.DeleteCopyWriting) => {
     CopyWritingServices.deleteCopyWriting(item).then((res) => {
-      getCopyWritingList(form.getFieldsValue());
+      getCopyWritingList();
     });
   };
 
@@ -333,7 +371,7 @@ function CopyWritingManagement() {
     CopyWritingServices.uploadCopyWriting(temp).then((res) => {
       switch (res.status) {
         case 200:
-          getCopyWritingList(form.getFieldsValue());
+          getCopyWritingList();
           message.success(res.message, 2);
           if (res.data.errorList.length > 0) {
             downloadCopy({
@@ -346,6 +384,17 @@ function CopyWritingManagement() {
         default:
           message.error(res.message, 2);
       }
+    });
+  };
+
+  /**
+   * 分页初始化
+   */
+  const pageInit = () => {
+    setPagination({
+      pageSize: 10,
+      current: 1,
+      total: 0,
     });
   };
 
@@ -397,6 +446,31 @@ function CopyWritingManagement() {
     });
   };
 
+  /**
+   * 分页改变
+   * @param page
+   * @param pageSize
+   */
+  const pageChange = (page: number, pageSize: number) => {
+    setPagination({
+      pageSize,
+      current: page,
+      total: pagination.total,
+    });
+  };
+
+  const resetEvent = () => {
+    const defaultModulesKey = form.getFieldsValue().modulesKey;
+    form.setFieldsValue({
+      modulesKey: defaultModulesKey,
+      subModulesKey: null,
+      copyKey: null,
+      langKey: null,
+      langText: null,
+    });
+    pageInit();
+  };
+
   return (
     <div className={classnames('copy-writing', space('space-y-5'))}>
       <Form
@@ -444,7 +518,7 @@ function CopyWritingManagement() {
         </Form.Item>
       </Form>
       <div className={classnames(textAlign('text-right'), space('space-x-5'))}>
-        <Button onClick={() => form.resetFields()}>重置</Button>
+        <Button onClick={resetEvent}>重置</Button>
         <Button type='primary' onClick={() => onSearch()}>
           查询
         </Button>
@@ -483,7 +557,11 @@ function CopyWritingManagement() {
           </Button>
         </div>
       </div>
-      <AntdTable data={tableData.data} />
+      <AntdTable
+        data={tableData.data}
+        pagination={pagination}
+        pageChange={pageChange}
+      />
       <CopyWritingForm
         key={showModal.toString()}
         visible={showModal}
