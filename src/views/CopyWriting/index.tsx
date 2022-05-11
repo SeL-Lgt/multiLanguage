@@ -322,6 +322,21 @@ function CopyWritingManagement() {
   };
 
   /**
+   * 重置查询
+   */
+  const resetEvent = () => {
+    const defaultModulesKey = form.getFieldsValue().modulesKey;
+    form.setFieldsValue({
+      modulesKey: defaultModulesKey,
+      subModulesKey: null,
+      copyKey: null,
+      langKey: null,
+      langText: null,
+    });
+    pageInit();
+  };
+
+  /**
    * 复制开发Key文案
    * @param value
    */
@@ -388,17 +403,6 @@ function CopyWritingManagement() {
   };
 
   /**
-   * 分页初始化
-   */
-  const pageInit = () => {
-    setPagination({
-      pageSize: 10,
-      current: 1,
-      total: 0,
-    });
-  };
-
-  /**
    * 下载文案
    * @param item
    */
@@ -459,16 +463,15 @@ function CopyWritingManagement() {
     });
   };
 
-  const resetEvent = () => {
-    const defaultModulesKey = form.getFieldsValue().modulesKey;
-    form.setFieldsValue({
-      modulesKey: defaultModulesKey,
-      subModulesKey: null,
-      copyKey: null,
-      langKey: null,
-      langText: null,
+  /**
+   * 分页初始化
+   */
+  const pageInit = () => {
+    setPagination({
+      pageSize: 10,
+      current: 1,
+      total: 0,
     });
-    pageInit();
   };
 
   return (
