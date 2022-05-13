@@ -89,7 +89,7 @@ function Modules() {
   useEffect(() => {
     queryModulesNameList();
     queryModulesList();
-  }, [pagination.current]);
+  }, [pagination.current, queryModulesName]);
 
   /**
    * 访问详情
