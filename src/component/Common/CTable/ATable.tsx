@@ -50,10 +50,10 @@ export function AntdTable(props: TablePropsType) {
       {pagination && (
         <Pagination
           total={pagination?.total}
-          current={pagination?.current}
           pageSize={pagination?.pageSize || 10}
-          defaultCurrent={1}
+          defaultCurrent={pagination?.current}
           defaultPageSize={10}
+          showQuickJumper
           onChange={(page, pageSize) => pageChangeEvent(page, pageSize)}
           className={classnames(textAlign('text-right'))}
           showTotal={(total) => `总条数：${total}`}
