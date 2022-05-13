@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Form, Input, message, Select, Upload } from 'antd';
 import classnames, {
   display,
@@ -124,19 +124,26 @@ function CopyWritingManagement() {
 
   /**
    * 监听父模块选择变更
-   * 父模块数值改变，获取对应子模块
+   * 父模块数值改变，获取对应子模块，且重置页码
    */
   useEffect(() => {
     const { modulesKey } = form.getFieldsValue();
-    modulesNameChange(modulesKey);
-    pageInit();
+    if (modulesKey) {
+      modulesNameChange(modulesKey);
+      querySubModulesNameList(modulesKey);
+      getCopyWritingList();
+    }
   }, [form.getFieldsValue().modulesKey]);
 
   /**
    * 监听页码变更
+   * 由于父模块改变时，已经进行一次请求，此时页码为1，防止重复请求，进行过滤
    */
   useEffect(() => {
-    getCopyWritingList();
+    const { modulesKey } = form.getFieldsValue();
+    if (modulesKey) {
+      getCopyWritingList();
+    }
   }, [pagination.current]);
 
   /**
@@ -169,10 +176,10 @@ function CopyWritingManagement() {
    * @param value
    */
   const modulesNameChange = (value: string) => {
-    querySubModulesNameList(value);
     form.setFieldsValue({
       subModulesKey: null,
     });
+    pageInit();
   };
 
   /**
@@ -239,10 +246,33 @@ function CopyWritingManagement() {
   };
 
   /**
+   * 重置查询
+   */
+  const resetEvent = () => {
+    const defaultModulesKey = form.getFieldsValue().modulesKey;
+    form.setFieldsValue({
+      modulesKey: defaultModulesKey,
+      subModulesKey: null,
+      copyKey: null,
+      langKey: null,
+      langText: null,
+    });
+    if (pagination.current === 1) {
+      getCopyWritingList();
+    } else {
+      pageInit();
+    }
+  };
+
+  /**
    * 条件查询列表
    */
   const onSearch = () => {
-    pageInit();
+    if (pagination.current === 1) {
+      getCopyWritingList();
+    } else {
+      pageInit();
+    }
   };
 
   /**
@@ -319,21 +349,6 @@ function CopyWritingManagement() {
     CopyWritingServices.deleteCopyWriting(item).then((res) => {
       getCopyWritingList();
     });
-  };
-
-  /**
-   * 重置查询
-   */
-  const resetEvent = () => {
-    const defaultModulesKey = form.getFieldsValue().modulesKey;
-    form.setFieldsValue({
-      modulesKey: defaultModulesKey,
-      subModulesKey: null,
-      copyKey: null,
-      langKey: null,
-      langText: null,
-    });
-    pageInit();
   };
 
   /**

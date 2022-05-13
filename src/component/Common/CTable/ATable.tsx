@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Attributes } from 'react';
 import { Table, Pagination } from 'antd';
 import { classnames, space, textAlign } from '~/tailwindcss-classnames';
 
@@ -22,7 +22,7 @@ interface TableProp {
   dataSource: Array<object>;
 }
 
-export interface TablePropsType {
+export interface TablePropsType extends Attributes {
   config?: TableConfig;
   data: TableProp;
   pagination?: PaginationType;
@@ -33,7 +33,7 @@ export function AntdTable(props: TablePropsType) {
   const { config, data, pagination, pageChange } = props;
   const pageChangeEvent = (page: number, pageSize: number) => {
     if (pageChange) {
-      pageChange(page, pageSize);
+      pageChange(pagination?.pageSize === pageSize ? page : 1, pageSize);
     }
   };
   return (
@@ -49,10 +49,11 @@ export function AntdTable(props: TablePropsType) {
       />
       {pagination && (
         <Pagination
-          total={pagination?.total}
-          pageSize={pagination?.pageSize || 10}
-          defaultCurrent={pagination?.current}
-          defaultPageSize={10}
+          key={pagination?.current}
+          total={pagination?.total || 0}
+          current={pagination?.current}
+          defaultCurrent={pagination?.current || 1}
+          defaultPageSize={pagination?.pageSize || 10}
           showQuickJumper
           onChange={(page, pageSize) => pageChangeEvent(page, pageSize)}
           className={classnames(textAlign('text-right'))}
