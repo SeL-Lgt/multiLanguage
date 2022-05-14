@@ -39,7 +39,7 @@ export class CopyWritingApi {
 
   static uploadCopyWriting = '/copyWriting/uploadCopyWriting';
 
-  static downloadCopyWriting = '/copyWriting/downloadCopyWriting';
+  static downloadCopyWritingByExcel = '/copyWriting/downloadCopyWritingByExcel';
 
   static downloadDefaultCopyExcel = '/copyWriting/downloadDefaultCopyExcel';
 }

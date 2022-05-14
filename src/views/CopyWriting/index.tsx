@@ -1,5 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Form, Input, message, Select, Upload } from 'antd';
+import {
+  Button,
+  Dropdown,
+  Form,
+  Input,
+  message,
+  Select,
+  Upload,
+  Menu,
+} from 'antd';
 import classnames, {
   display,
   justifyContent,
@@ -394,7 +403,7 @@ function CopyWritingManagement() {
           getCopyWritingList();
           message.success(res.message, 2);
           if (res.data.errorList.length > 0) {
-            downloadCopy({
+            downloadCopyWritingByExcel({
               modulesKey,
               type: 'error',
               data: res.data.errorList,
@@ -408,12 +417,14 @@ function CopyWritingManagement() {
   };
 
   /**
-   * 下载文案
+   * 下载文案Excel
    * @param item
    */
-  const downloadCopy = (item: CopyWriting.DownLoadWriting<any>) => {
+  const downloadCopyWritingByExcel = (
+    item: CopyWriting.DownLoadWriting<any>,
+  ) => {
     const { modulesKey, type } = item;
-    CopyWritingServices.downloadCopyWriting(item).then((res) => {
+    CopyWritingServices.downloadCopyWritingByExcel(item).then((res) => {
       if (res?.status === 500) {
         message.error(res.message, 2);
       } else {
@@ -555,7 +566,7 @@ function CopyWritingManagement() {
           </div>
           <Button
             onClick={() =>
-              downloadCopy({
+              downloadCopyWritingByExcel({
                 modulesKey: form.getFieldsValue().modulesKey,
                 type: 'inquiry',
               })

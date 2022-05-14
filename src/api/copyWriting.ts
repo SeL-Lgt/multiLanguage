@@ -87,11 +87,11 @@ class CopyWritingServices {
    * 下载文案
    * @param data
    */
-  static downloadCopyWriting = async <T>(
+  static downloadCopyWritingByExcel = async <T>(
     data: CopyWriting.DownLoadWriting<T>,
   ) => {
     const res = await request.postBlob({
-      url: CopyWritingApi.downloadCopyWriting,
+      url: CopyWritingApi.downloadCopyWritingByExcel,
       data,
     });
     return res as Result<any>;
