@@ -112,6 +112,8 @@ function CopyWritingManagement() {
     current: 1,
     total: 0,
   });
+  // 用于存储form.getFieldsValue()的查询条件值，便于监听请求列表
+  const [listenData, setListenData] = useState({});
 
   /**
    * 初始化加载
@@ -124,27 +126,24 @@ function CopyWritingManagement() {
 
   /**
    * 监听父模块选择变更
-   * 父模块数值改变，获取对应子模块，且重置页码
+   * 父模块数值改变，并获取对应子模块
    */
   useEffect(() => {
     const { modulesKey } = form.getFieldsValue();
     if (modulesKey) {
-      modulesNameChange(modulesKey);
       querySubModulesNameList(modulesKey);
-      getCopyWritingList();
     }
   }, [form.getFieldsValue().modulesKey]);
 
   /**
-   * 监听页码变更
-   * 由于父模块改变时，已经进行一次请求，此时页码为1，防止重复请求，进行过滤
+   * 监听页码变更与查询条件变更
    */
   useEffect(() => {
     const { modulesKey } = form.getFieldsValue();
     if (modulesKey) {
       getCopyWritingList();
     }
-  }, [pagination.current]);
+  }, [pagination.current, form.getFieldsValue().modulesKey, listenData]);
 
   /**
    * 查询父模块下拉详情
@@ -172,14 +171,11 @@ function CopyWritingManagement() {
 
   /**
    * 父模块下拉框改变时
-   * 清空子模块，并查询父模块下的子模块
+   * 清空所有查询条件
    * @param value
    */
   const modulesNameChange = (value: string) => {
-    form.setFieldsValue({
-      subModulesKey: null,
-    });
-    pageInit();
+    resetEvent();
   };
 
   /**
@@ -257,22 +253,16 @@ function CopyWritingManagement() {
       langKey: null,
       langText: null,
     });
-    if (pagination.current === 1) {
-      getCopyWritingList();
-    } else {
-      pageInit();
-    }
+    pageInit();
+    setListenData(form.getFieldsValue());
   };
 
   /**
    * 条件查询列表
    */
   const onSearch = () => {
-    if (pagination.current === 1) {
-      getCopyWritingList();
-    } else {
-      pageInit();
-    }
+    pageInit();
+    setListenData(form.getFieldsValue());
   };
 
   /**
