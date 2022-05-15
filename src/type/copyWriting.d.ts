@@ -31,7 +31,8 @@ declare namespace CopyWriting {
   }
   interface DownLoadWriting<T> {
     modulesKey: string;
-    type: 'inquiry' | 'error';
+    type?: 'inquiry' | 'error';
+    langKey?: string;
     data?: Array<T>;
   }
 }

@@ -41,5 +41,7 @@ export class CopyWritingApi {
 
   static downloadCopyWritingByExcel = '/copyWriting/downloadCopyWritingByExcel';
 
+  static downloadCopyWritingByJSON = '/copyWriting/downloadCopyWritingByJSON';
+
   static downloadDefaultCopyExcel = '/copyWriting/downloadDefaultCopyExcel';
 }

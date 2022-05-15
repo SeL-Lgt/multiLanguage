@@ -7,6 +7,7 @@ import {
   message,
   Select,
   Upload,
+  Space,
   Menu,
 } from 'antd';
 import classnames, {
@@ -27,6 +28,7 @@ import MarkType from '@/type/mark';
 import CopyWritingServices from '@/api/copyWriting';
 import type { RcFile, UploadRequestOption } from 'rc-upload/lib/interface';
 import TimeUtil from '@/utils/timeUtil';
+import { DownOutlined } from '@ant-design/icons';
 
 function CopyWritingManagement() {
   const [form] = Form.useForm();
@@ -421,7 +423,7 @@ function CopyWritingManagement() {
    * @param item
    */
   const downloadCopyWritingByExcel = (
-    item: CopyWriting.DownLoadWriting<any>,
+    item: CopyWriting.DownLoadWriting<unknown>,
   ) => {
     const { modulesKey, type } = item;
     CopyWritingServices.downloadCopyWritingByExcel(item).then((res) => {
@@ -442,6 +444,28 @@ function CopyWritingManagement() {
         a.setAttribute('download', fileName);
         a.click();
       }
+    });
+  };
+
+  /**
+   * 下载文案JSON格式
+   */
+  const downloadCopyWritingByJSON = () => {
+    const { modulesKey } = form.getFieldsValue();
+    markList?.forEach((markItem) => {
+      const { langKey } = markItem;
+      CopyWritingServices.downloadCopyWritingByJSON({
+        modulesKey,
+        langKey,
+      }).then((res) => {
+        const blob = new Blob([res as unknown as Blob], { type: 'text/plain' });
+        const objectUrl = URL.createObjectURL(blob);
+        const fileName = `${langKey}.json`;
+        const a = document.createElement('a');
+        a.setAttribute('href', objectUrl);
+        a.setAttribute('download', fileName);
+        a.click();
+      });
     });
   };
 
@@ -489,6 +513,28 @@ function CopyWritingManagement() {
       total: 0,
     });
   };
+
+  /**
+   * 下载文案类型选择列表
+   */
+  const downloadCopyWritingMenuView = () => (
+    <Menu>
+      <Menu.Item
+        key='excel'
+        onClick={() =>
+          downloadCopyWritingByExcel({
+            modulesKey: form.getFieldsValue().modulesKey,
+            type: 'inquiry',
+          })
+        }
+      >
+        excel格式
+      </Menu.Item>
+      <Menu.Item key='json' onClick={() => downloadCopyWritingByJSON()}>
+        JSON格式
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <div className={classnames('copy-writing', space('space-y-5'))}>
@@ -564,16 +610,14 @@ function CopyWritingManagement() {
               <Button type='primary'>导入文案</Button>
             </Upload>
           </div>
-          <Button
-            onClick={() =>
-              downloadCopyWritingByExcel({
-                modulesKey: form.getFieldsValue().modulesKey,
-                type: 'inquiry',
-              })
-            }
-          >
-            导出文案
-          </Button>
+          <Dropdown overlay={downloadCopyWritingMenuView}>
+            <Button>
+              <Space>
+                导出文案
+                <DownOutlined />
+              </Space>
+            </Button>
+          </Dropdown>
         </div>
       </div>
       <AntdTable

@@ -61,6 +61,17 @@ class Request {
       headers,
     });
   }
+
+  getBlob(config: RequestType.GetType) {
+    const { url, params, headers } = config;
+    return this.request.request({
+      method: 'GET',
+      responseType: 'blob',
+      url,
+      params,
+      headers,
+    });
+  }
 }
 const request = new Request();
 export default request;

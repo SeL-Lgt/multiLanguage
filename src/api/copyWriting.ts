@@ -84,7 +84,7 @@ class CopyWritingServices {
   };
 
   /**
-   * 下载文案
+   * 下载文案Excel
    * @param data
    */
   static downloadCopyWritingByExcel = async <T>(
@@ -93,6 +93,20 @@ class CopyWritingServices {
     const res = await request.postBlob({
       url: CopyWritingApi.downloadCopyWritingByExcel,
       data,
+    });
+    return res as Result<any>;
+  };
+
+  /**
+   * 下载文案JSON
+   * @param params
+   */
+  static downloadCopyWritingByJSON = async <T>(
+    params: CopyWriting.DownLoadWriting<T>,
+  ) => {
+    const res = await request.getBlob({
+      url: CopyWritingApi.downloadCopyWritingByJSON,
+      params,
     });
     return res as Result<any>;
   };
