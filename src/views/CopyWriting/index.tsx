@@ -29,6 +29,7 @@ import CopyWritingServices from '@/api/copyWriting';
 import type { RcFile, UploadRequestOption } from 'rc-upload/lib/interface';
 import TimeUtil from '@/utils/timeUtil';
 import { DownOutlined } from '@ant-design/icons';
+import JSZip from 'jszip';
 
 function CopyWritingManagement() {
   const [form] = Form.useForm();
@@ -452,20 +453,38 @@ function CopyWritingManagement() {
    */
   const downloadCopyWritingByJSON = () => {
     const { modulesKey } = form.getFieldsValue();
+    const zip = new JSZip();
+    const event: Array<Promise<unknown>> = [];
     markList?.forEach((markItem) => {
       const { langKey } = markItem;
-      CopyWritingServices.downloadCopyWritingByJSON({
-        modulesKey,
-        langKey,
-      }).then((res) => {
-        const blob = new Blob([res as unknown as Blob], { type: 'text/plain' });
-        const objectUrl = URL.createObjectURL(blob);
-        const fileName = `${langKey}.json`;
-        const a = document.createElement('a');
-        a.setAttribute('href', objectUrl);
-        a.setAttribute('download', fileName);
-        a.click();
+      event.push(
+        CopyWritingServices.downloadCopyWritingByJSON({
+          modulesKey,
+          langKey,
+        }),
+      );
+    });
+    Promise.all(event).then((res) => {
+      res.forEach((item, index) => {
+        const blob = new Blob([item as unknown as Blob], {
+          type: 'text/plain',
+        });
+        if (markList) {
+          zip.file(`${markList[index].langKey}.json`, blob);
+        }
       });
+      zip
+        .generateAsync({
+          type: 'blob',
+        })
+        .then((content) => {
+          const fileName = `${modulesKey}语言包.zip`;
+          const objectUrl = URL.createObjectURL(content);
+          const a = document.createElement('a');
+          a.setAttribute('href', objectUrl);
+          a.setAttribute('download', fileName);
+          a.click();
+        });
     });
   };
 
