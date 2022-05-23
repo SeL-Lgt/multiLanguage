@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Modal } from 'antd';
+import { Form, Input, message, Modal } from 'antd';
 import ModulesType from '@/type/modules';
 import ModulesServices from '@/api/modules';
 
@@ -39,20 +39,30 @@ function ParentForm(props: PropsType) {
   const okModal = () => {
     form
       .validateFields()
-      .then((res) => {
+      .then((value) => {
         switch (type) {
           case 'Edit':
             ModulesServices.updateModules({
               id: formData.id,
               updateUser: 'admin',
-              ...res,
-            }).then(() => {
-              closeModal();
+              ...value,
+            }).then((res) => {
+              if (res.status === 200) {
+                message.success(res.message, 2);
+                closeModal();
+              } else {
+                message.error(res.message, 2);
+              }
             });
             break;
           default:
-            ModulesServices.addModules(res).then(() => {
-              closeModal();
+            ModulesServices.addModules(value).then((res) => {
+              if (res.status === 200) {
+                message.success(res.message, 2);
+                closeModal();
+              } else {
+                message.error(res.message, 2);
+              }
             });
         }
       })

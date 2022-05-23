@@ -1,4 +1,4 @@
-import { Form, Input, Modal } from 'antd';
+import { Form, Input, message, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import ModulesType from '@/type/modules';
 import ModulesServices from '@/api/modules';
@@ -37,9 +37,14 @@ function SonForm(props: PropsType) {
   const okModal = () => {
     form
       .validateFields()
-      .then((res) => {
-        ModulesServices.addSubModules(res).then(() => {
-          closeModal();
+      .then((value) => {
+        ModulesServices.addSubModules(value).then((res) => {
+          if (res.status === 200) {
+            message.success(res.message, 2);
+            closeModal();
+          } else {
+            message.error(res.message, 2);
+          }
         });
       })
       .catch((error) => {

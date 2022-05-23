@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from 'antd';
+import { Button, Popconfirm } from 'antd';
 import classnames, {
   alignItems,
   display,
@@ -32,9 +32,12 @@ function ModulesDetail() {
           key: 'operating',
           align: 'center',
           render: (text: string, item: ModulesType.SubModulesItem) => (
-            <Button type='link' onClick={() => deleteModule(item)}>
-              删除
-            </Button>
+            <Popconfirm
+              title={`是否删除该模块：${item.subModulesKey}`}
+              onConfirm={() => deleteModule(item)}
+            >
+              <Button type='link'>删除</Button>
+            </Popconfirm>
           ),
         },
       ],
