@@ -9,6 +9,7 @@ import {
   Upload,
   Space,
   Menu,
+  Popconfirm,
 } from 'antd';
 import classnames, {
   display,
@@ -95,14 +96,14 @@ function CopyWritingManagement() {
               >
                 编辑
               </Button>
-              <Button
-                type='link'
-                onClick={() => {
-                  deleteEvent(item as CopyWriting.DeleteCopyWriting);
-                }}
+              <Popconfirm
+                title={`是否删除文案：${item.langText}`}
+                onConfirm={() =>
+                  deleteEvent(item as CopyWriting.DeleteCopyWriting)
+                }
               >
-                删除
-              </Button>
+                <Button type='link'>删除</Button>
+              </Popconfirm>
             </div>
           ),
         },
