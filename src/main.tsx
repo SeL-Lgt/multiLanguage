@@ -5,7 +5,7 @@ import App from './App';
 import '@/assets/styles/tailwind.less';
 
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter basename='/multiLanguage-client'>
     <App />
   </BrowserRouter>,
   document.getElementById('root'),
