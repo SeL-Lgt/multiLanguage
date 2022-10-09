@@ -1,7 +1,7 @@
 import React from 'react';
 
 function Home() {
-  return <div>sss</div>;
+  return <div>使用说明文档待补充</div>;
 }
 
 export default Home;

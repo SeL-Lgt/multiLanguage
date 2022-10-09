@@ -2,6 +2,9 @@
 
 多语言管理平台前端
 
+> 在线地址
+> http://lisay.top/multiLanguage-client
+>
 > 技术栈：React、React-Router、Vite、TypeScript
 >
 > node 版本: 14.19.1
